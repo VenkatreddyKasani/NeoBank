@@ -1,0 +1,62 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Card Governance Console</p>
+    <h1>Virtual & Physical Cards Management</h1>
+    <p class="page-subtitle">Inspect customer card issuances, adjust spending ceilings, or block compromised credentials.</p>
+  </div>
+</section>
+
+<!-- Cards Registry Table -->
+<section class="bank-card table-panel" appCardElevation>
+  <div class="card-heading">
+    <div>
+      <h2>System Card Issuances</h2>
+      <p>Global debit and credit cards issued across customer accounts ({{ cardsList().length }} records)</p>
+    </div>
+    <span class="badge bg-primary">PCI-DSS Compliant View</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Card ID</th>
+          <th>Masked Number</th>
+          <th>Cardholder</th>
+          <th>Network & Type</th>
+          <th class="text-end">Spending Limit</th>
+          <th>Status</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of cardsList(); track c.id) {
+          <tr>
+            <td><code>{{ c.id }}</code></td>
+            <td><code class="card-num">{{ c.cardNumber }}</code></td>
+            <td>
+              <strong>{{ c.holderName }}</strong>
+              <small>{{ c.customerId }}</small>
+            </td>
+            <td><span class="type-pill">{{ c.type }}</span></td>
+            <td class="text-end font-mono">
+              <strong>₹{{ c.limit.toLocaleString() }}</strong>
+            </td>
+            <td>
+              <span class="status-pill" [ngClass]="c.status === 'active' ? 'success' : 'danger'">
+                <i class="bi" [ngClass]="c.status === 'active' ? 'bi-check-circle-fill' : 'bi-snow'"></i>
+                {{ c.status === 'active' ? 'Active' : 'Frozen' }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button type="button" class="btn-action" [ngClass]="c.status === 'active' ? 'btn-freeze' : 'btn-unfreeze'" (click)="toggleCardStatus(c)" [title]="c.status === 'active' ? 'Freeze Card' : 'Unfreeze Card'">
+                <i class="bi" [ngClass]="c.status === 'active' ? 'bi-snow' : 'bi-sun-fill'"></i>
+                {{ c.status === 'active' ? 'Freeze' : 'Unfreeze' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

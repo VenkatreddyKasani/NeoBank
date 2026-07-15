@@ -1,0 +1,112 @@
+.page-head { margin-bottom: 24px; }
+.scan-btn-top { border-radius: 12px; padding: 12px 20px; font-size: 14px; }
+
+/* Payments Navigation Bar */
+.payments-nav-bar { display: grid; grid-template-columns: repeat(3, 1fr); padding: 8px; border-radius: 16px; margin-bottom: 28px; background: #fff; gap: 8px; }
+.payments-nav-bar button { background: transparent; border: none; border-radius: 12px; color: var(--ink-muted); font-size: 13px; font-weight: 600; padding: 14px 10px; transition: 0.2s; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.payments-nav-bar button:hover { color: var(--blue); background: #f8fafc; }
+.payments-nav-bar button.active { background: var(--blue); color: #fff; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); }
+
+/* TAB 1: UPI & QR */
+.payment-grid { display: grid; gap: 24px; grid-template-columns: minmax(360px, 1.3fr) minmax(300px, 0.7fr); margin-bottom: 24px; }
+.upi-card { padding: 28px; }
+.upi-badge { background: #dbeafe; border-radius: 20px; color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; }
+.qr-card { align-items: center; background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); border-radius: var(--card-radius); color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 36px 28px; position: relative; text-align: center; box-shadow: var(--shadow-lg); }
+.qr-visual { width: 72px; height: 72px; border-radius: 20px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25); display: grid; place-items: center; font-size: 36px; margin-bottom: 20px; }
+.qr-card h2 { font-size: 20px; font-weight: 800; margin: 0 0 8px; color: #fff; }
+.qr-card p { color: #dbeafe; font-size: 13px; line-height: 1.6; margin: 0 0 24px; max-width: 260px; }
+.qr-action-btn { background: #fff !important; color: #1e3a8a !important; font-size: 14px !important; padding: 12px 24px !important; border: none !important; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important; }
+.qr-action-btn:hover { background: #f8fafc !important; transform: translateY(-2px); }
+
+/* Frequent Contacts */
+.favorites { padding: 28px; }
+.favorite-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 20px; }
+.favorite-list button { display: flex; align-items: center; gap: 12px; background: #f8fafc; border: 1px solid var(--line); border-radius: 14px; padding: 14px; text-align: left; cursor: pointer; transition: 0.2s; position: relative; }
+.favorite-list button:hover { border-color: #93c5fd; background: #eff6ff; transform: translateY(-2px); }
+.favorite-list button span { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex: 0 0 auto; }
+.favorite-list button span.blue { background: #dbeafe; color: #1d4ed8; }
+.favorite-list button span.violet { background: #ede9fe; color: #6d28d9; }
+.favorite-list button span.green { background: #dcfce7; color: #15803d; }
+.favorite-list button span.orange { background: #ffedd5; color: #c2410c; }
+.fav-copy { flex: 1; min-width: 0; }
+.fav-copy strong { display: block; font-size: 13px; font-weight: 700; color: var(--ink); }
+.fav-copy small { color: var(--ink-muted); font-size: 11px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fav-arrow { color: var(--ink-muted); font-size: 14px; }
+.favorite-list button:hover .fav-arrow { color: var(--blue); }
+
+/* TAB 2: UTILITY BILLS */
+.bill-options-grid { display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); margin-top: 16px; }
+.bill-card { display: flex; flex-direction: column; justify-content: space-between; padding: 24px; transition: 0.3s; border: 1px solid var(--line); }
+.bill-card:hover { border-color: #93c5fd; transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.bill-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.bill-icon-badge { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; }
+.bill-icon-badge.amber { background: #fef3c7; color: #d97706; }
+.bill-icon-badge.blue { background: #dbeafe; color: #2563eb; }
+.bill-icon-badge.violet { background: #ede9fe; color: #7c3aed; }
+.bill-icon-badge.cyan { background: #cffafe; color: #0891b2; }
+.bill-due-tag { background: #fef2f2; color: #dc2626; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+.bill-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 6px; color: var(--ink); }
+.bill-amount { font-size: 24px; font-weight: 800; color: var(--ink); margin: 0 0 4px; letter-spacing: -0.5px; }
+.bill-provider { color: var(--ink-muted); font-size: 11px; display: block; margin-bottom: 20px; }
+.bill-pay-btn { width: 100%; justify-content: center; }
+
+.auto-pay-banner { display: flex; justify-content: space-between; align-items: center; padding: 28px; background: linear-gradient(135deg, #f8fafc, #eff6ff); border: 1px solid #dbeafe; }
+.auto-pay-left { display: flex; align-items: center; gap: 18px; }
+.auto-pay-icon { width: 52px; height: 52px; border-radius: 16px; background: #2563eb; color: #fff; font-size: 24px; display: grid; place-items: center; flex: 0 0 auto; }
+.auto-pay-left h3 { font-size: 18px; font-weight: 700; margin: 0 0 4px; color: var(--ink); }
+.auto-pay-left p { color: var(--ink-muted); font-size: 13px; margin: 0; max-width: 500px; }
+
+/* TAB 3: RECHARGE */
+.recharge-plans-grid { display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); margin-top: 16px; }
+.recharge-card { display: flex; flex-direction: column; justify-content: space-between; padding: 24px; transition: 0.3s; }
+.recharge-card:hover { border-color: #93c5fd; transform: translateY(-3px); }
+.plan-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.operator-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+.plan-badge { background: #f0fdf4; color: #16a34a; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+.plan-price { font-size: 30px; font-weight: 800; color: var(--blue); margin-bottom: 16px; letter-spacing: -0.6px; }
+.plan-meta { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--ink-muted); margin-bottom: 22px; }
+.plan-meta span { display: flex; align-items: center; gap: 8px; }
+.plan-meta strong { color: var(--ink); }
+.recharge-btn { width: 100%; justify-content: center; }
+
+/* QR SCANNER SIMULATION MODAL */
+.scanner-modal { max-width: 520px; }
+.camera-viewport { background: #0f172a; border-radius: 20px; padding: 40px 20px; margin-bottom: 24px; position: relative; }
+.scan-frame { width: 200px; height: 200px; margin: 0 auto 16px; position: relative; }
+.corner { position: absolute; width: 30px; height: 30px; border-color: #60a5fa; border-style: solid; border-width: 0; }
+.top-left { top: 0; left: 0; border-top-width: 4px; border-left-width: 4px; border-top-left-radius: 12px; }
+.top-right { top: 0; right: 0; border-top-width: 4px; border-right-width: 4px; border-top-right-radius: 12px; }
+.bottom-left { bottom: 0; left: 0; border-bottom-width: 4px; border-left-width: 4px; border-bottom-left-radius: 12px; }
+.bottom-right { bottom: 0; right: 0; border-bottom-width: 4px; border-right-width: 4px; border-bottom-right-radius: 12px; }
+.laser-beam { position: absolute; top: 10%; left: 10%; right: 10%; height: 2px; background: #60a5fa; box-shadow: 0 0 12px #60a5fa; animation: scanLaser 2s infinite alternate ease-in-out; }
+@keyframes scanLaser {
+  0% { top: 10%; }
+  100% { top: 90%; }
+}
+.camera-status { color: #94a3b8; font-size: 12px; margin: 0; }
+.demo-merchants { text-align: left; }
+.demo-label { font-size: 11px; font-weight: 700; color: var(--ink-muted); letter-spacing: 0.8px; display: block; margin-bottom: 12px; }
+.merchant-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.merchant-btn { background: #f8fafc; border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: 12px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; text-align: left; }
+.merchant-btn:hover { border-color: #60a5fa; background: var(--blue-light); color: var(--blue); }
+
+.scanned-confirm-box { padding: 20px; background: #f8fafc; border-radius: 18px; border: 1px solid var(--line); margin: 10px 0; }
+.merchant-avatar { width: 64px; height: 64px; border-radius: 20px; background: #dbeafe; color: #2563eb; display: grid; place-items: center; font-size: 28px; margin: 0 auto 12px; }
+.scanned-tag { background: #f0fdf4; color: #16a34a; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+.scanned-confirm-box h3 { font-size: 22px; font-weight: 800; margin: 0 0 4px; }
+.m-upi { color: var(--ink-muted); font-size: 14px; margin: 0 0 16px; }
+.scan-amount { font-size: 34px; font-weight: 800; color: var(--ink); margin-bottom: 12px; }
+.security-info { color: var(--ink-muted); font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+.dark-theme .payments-nav-bar, .dark-theme .favorite-list button, .dark-theme .merchant-btn, .dark-theme .scanned-confirm-box { background: #182235; border-color: #2e3b4e; }
+.dark-theme .auto-pay-banner { background: #182235; border-color: #2e3b4e; }
+
+@media (max-width: 992px) {
+  .payment-grid { grid-template-columns: 1fr; }
+  .favorite-list, .bill-options-grid, .recharge-plans-grid { grid-template-columns: repeat(2, 1fr); }
+  .auto-pay-banner { flex-direction: column; gap: 16px; align-items: flex-start; }
+}
+@media (max-width: 600px) {
+  .favorite-list, .bill-options-grid, .recharge-plans-grid, .payments-nav-bar { grid-template-columns: 1fr; }
+  .merchant-buttons { grid-template-columns: 1fr; }
+}

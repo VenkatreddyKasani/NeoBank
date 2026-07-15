@@ -1,0 +1,484 @@
+<section class="page-head dashboard-head">
+  <div>
+    <p class="eyebrow">Digital Command Center</p>
+    <h1>Welcome {{ bank.profile().name.split(' ')[0] }} <span class="wave">👋</span></h1>
+    <p class="page-subtitle">Personal banking suite with instant multi-currency vaults and zero-fee transactions.</p>
+  </div>
+  <div class="head-actions">
+    <button class="secondary-btn" type="button" (click)="addQuickMoney()">
+      <i class="bi bi-plus-circle-fill text-blue"></i> Instant Top Up (₹5k)
+    </button>
+    <button class="primary-btn" type="button" (click)="openCreateAccountModal()">
+      <i class="bi bi-folder-plus"></i> Create New Account
+    </button>
+  </div>
+</section>
+
+<!-- Primary Savings Account Summary Card (Requirement #5) -->
+<section class="primary-account-showcase bank-card" appCardElevation>
+  <div class="showcase-left">
+    <div class="showcase-badge"><i class="bi bi-wallet2"></i> {{ primaryAccount().type || 'Savings Account' }}</div>
+    <h2 class="showcase-title">{{ primaryAccount().name }}</h2>
+    <div class="showcase-meta">
+      <span><strong>Account Number:</strong> {{ primaryAccount().number }}</span>
+      <span><strong>Status:</strong> Active & Verified</span>
+    </div>
+    <div class="showcase-balance-row">
+      <span class="balance-sublabel">Current Balance</span>
+      <div class="showcase-balance" [class.balance-hidden]="!balanceVisible()">
+        {{ balanceVisible() ? (primaryAccount().balance | inr:'1.2-2') : '₹ •••••••••' }}
+      </div>
+      <button class="balance-eye" type="button" (click)="toggleBalance()" [title]="balanceVisible() ? 'Hide balance' : 'Show balance'">
+        <i class="bi" [ngClass]="balanceVisible() ? 'bi-eye-slash' : 'bi-eye'"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="showcase-right">
+    <div class="quick-actions-box">
+      <div class="qa-header">
+        <h3><i class="bi bi-lightning-charge-fill"></i> Quick Vault Actions</h3>
+        <span class="qa-badge">Instant 1-Tap</span>
+      </div>
+      <div class="qa-grid">
+        <button type="button" class="qa-btn" (click)="openCreateAccountModal()">
+          <span class="qa-icon-wrap"><i class="bi bi-folder-plus"></i></span>
+          <div class="qa-text">
+            <strong>New Vault</strong>
+            <small>Open account</small>
+          </div>
+        </button>
+        <a routerLink="/user/transactions" class="qa-btn">
+          <span class="qa-icon-wrap"><i class="bi bi-send"></i></span>
+          <div class="qa-text">
+            <strong>Transfer</strong>
+            <small>IMPS & UPI</small>
+          </div>
+        </a>
+        <button type="button" class="qa-btn" (click)="openLoanModal()">
+          <span class="qa-icon-wrap"><i class="bi bi-cash-stack"></i></span>
+          <div class="qa-text">
+            <strong>Instant Loan</strong>
+            <small>Credit line</small>
+          </div>
+        </button>
+        <a routerLink="/user/statements" class="qa-btn">
+          <span class="qa-icon-wrap"><i class="bi bi-file-earmark-spreadsheet"></i></span>
+          <div class="qa-text">
+            <strong>Statements</strong>
+            <small>PDF / Excel</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Net Worth & Core Metrics Grid -->
+<section class="metrics-grid">
+  <!-- Total Balance Card -->
+  <article class="balance-panel" appCardElevation>
+    <div class="balance-top">
+      <div>
+        <span class="balance-label"><i class="bi bi-shield-lock-fill"></i> Total Net Liquid Balance</span>
+        <div class="balance-value" [class.balance-hidden]="!balanceVisible()">
+          {{ balanceVisible() ? (bank.balance() | inr:'1.2-2') : '₹ •••••••••' }}
+        </div>
+        <span class="balance-change">
+          <i class="bi bi-arrow-up-right-circle-fill"></i> +14.2% <em>vs last month</em>
+        </span>
+      </div>
+    </div>
+    <div class="balance-footer">
+      <span><i class="bi bi-check-circle-fill"></i> {{ bank.accountsList().length }} accounts active & synced</span>
+      <a routerLink="/user/accounts">View All Accounts <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </article>
+
+  <!-- Metric 1: Monthly Income -->
+  <article class="metric-card bank-card" appCardElevation>
+    <div class="metric-icon green"><i class="bi bi-arrow-down-left"></i></div>
+    <div>
+      <span>Monthly Inflow</span>
+      <strong>₹85,400.00</strong>
+      <small class="positive"><i class="bi bi-graph-up"></i> +8.5% inflow</small>
+    </div>
+  </article>
+
+  <!-- Metric 2: Monthly Spend -->
+  <article class="metric-card bank-card" appCardElevation>
+    <div class="metric-icon orange"><i class="bi bi-arrow-up-right"></i></div>
+    <div>
+      <span>Monthly Outflow</span>
+      <strong>₹48,120.00</strong>
+      <small>Within budget limits</small>
+    </div>
+  </article>
+
+  <!-- Metric 3: Active Investments -->
+  <article class="metric-card bank-card" appCardElevation>
+    <div class="metric-icon violet"><i class="bi bi-pie-chart-fill"></i></div>
+    <div>
+      <span>Investments Value</span>
+      <strong>₹3,42,890.00</strong>
+      <small class="positive">+₹12,450 returns</small>
+    </div>
+  </article>
+</section>
+
+<!-- Main Analytics & Actions Grid -->
+<section class="dashboard-grid primary-grid">
+  <!-- Left: Income vs Spend Chart -->
+  <article class="bank-card chart-card">
+    <div class="card-heading">
+      <div>
+        <h2>6-Month Cashflow Velocity</h2>
+        <p>Comparison of monthly incoming credits vs outflows</p>
+      </div>
+      <div class="chart-key">
+        @for (item of chartLegend; track item.name) {
+          <span><i [class]="item.color"></i> {{ item.name }}</span>
+        }
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas #spendingChart></canvas>
+    </div>
+  </article>
+
+  <!-- Right: Quick Navigation Actions -->
+  <article class="bank-card actions-card">
+    <div class="card-heading">
+      <div>
+        <h2>Banking Shortcuts</h2>
+        <p>1-tap access to frequent tasks</p>
+      </div>
+    </div>
+    <div class="quick-action-list">
+      <a class="quick-action" routerLink="/user/transactions">
+        <span class="quick-icon blue"><i class="bi bi-send-fill"></i></span>
+        <span>
+          <strong>Send Money IMPS / UPI</strong>
+          <small>Zero fees instant transfer</small>
+        </span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+
+      <a class="quick-action" routerLink="/user/payments">
+        <span class="quick-icon orange"><i class="bi bi-qr-code-scan"></i></span>
+        <span>
+          <strong>Scan & Pay Merchant QR</strong>
+          <small>Use camera at shops & cabs</small>
+        </span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+
+      <a class="quick-action" routerLink="/user/statements">
+        <span class="quick-icon violet"><i class="bi bi-file-earmark-arrow-down"></i></span>
+        <span>
+          <strong>Download Statements</strong>
+          <small>PDF / Excel monthly extracts</small>
+        </span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+
+      <a class="quick-action" routerLink="/user/cards">
+        <span class="quick-icon pink"><i class="bi bi-credit-card-2-front-fill"></i></span>
+        <span>
+          <strong>Manage Virtual Cards</strong>
+          <small>Freeze, set limits & order physical</small>
+        </span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+    </div>
+  </article>
+</section>
+
+<!-- Loans & Instant Credit Line Module (User Dashboard) -->
+<section class="loans-dashboard-module mb-4">
+  <article class="bank-card loans-showcase-panel" appCardElevation>
+    <div class="loans-header">
+      <div>
+        <div class="loans-badge"><i class="bi bi-shield-check"></i> Pre-Approved Facility</div>
+        <h2>Active Credit Lines & Loan Vaults</h2>
+        <p>Instant zero-paperwork borrowing with flexible monthly amortization</p>
+      </div>
+      <button type="button" class="btn-loan-cta" (click)="openLoanModal()">
+        <i class="bi bi-plus-circle-fill"></i> Apply for Loan / Credit Line
+      </button>
+    </div>
+
+    <div class="loans-body">
+      @if (bank.userLoans().length > 0) {
+        <div class="loans-grid">
+          @for (loan of bank.userLoans(); track loan.id) {
+            <div class="loan-card-item" [ngClass]="loan.status === 'Active' ? 'status-active' : 'status-pending'">
+              <div class="loan-item-top">
+                <div class="loan-title-group">
+                  <span class="loan-icon-chip"><i class="bi bi-cash-coin"></i></span>
+                  <div>
+                    <h3>{{ loan.type }}</h3>
+                    <small class="loan-id">{{ loan.id }} · Disbursed on {{ loan.appliedDate | date:'dd MMM yyyy' }}</small>
+                  </div>
+                </div>
+                <span class="status-pill" [ngClass]="loan.status === 'Active' ? 'success' : 'warning'">
+                  <i class="bi" [ngClass]="loan.status === 'Active' ? 'bi-check-circle-fill' : 'bi-clock-fill'"></i>
+                  {{ loan.status }}
+                </span>
+              </div>
+
+              <div class="loan-metrics-row">
+                <div class="loan-metric">
+                  <span>Total Disbursed</span>
+                  <strong>{{ loan.amount | inr }}</strong>
+                </div>
+                <div class="loan-metric">
+                  <span>Outstanding Balance</span>
+                  <strong class="text-primary">{{ (loan.remainingAmount !== undefined ? loan.remainingAmount : loan.amount) | inr }}</strong>
+                </div>
+                <div class="loan-metric">
+                  <span>Monthly EMI</span>
+                  <strong>{{ loan.emi | inr }} <small class="text-muted">/mo</small></strong>
+                </div>
+                <div class="loan-metric">
+                  <span>Interest & Tenure</span>
+                  <strong>{{ loan.interestRate || 10.5 }}% p.a. · {{ loan.tenure }}</strong>
+                </div>
+              </div>
+
+              <div class="loan-progress-box">
+                <div class="progress-bar-wrap">
+                  <div class="progress-fill" [style.width.%]="((loan.amount - (loan.remainingAmount !== undefined ? loan.remainingAmount : loan.amount)) / loan.amount) * 100"></div>
+                </div>
+                <div class="progress-labels">
+                  <span>{{ (((loan.amount - (loan.remainingAmount !== undefined ? loan.remainingAmount : loan.amount)) / loan.amount) * 100) | number:'1.0-0' }}% repaid</span>
+                  <span>Next due: {{ loan.nextDueDate || '05 Aug 2026' }}</span>
+                </div>
+              </div>
+
+              <div class="loan-item-actions">
+                @if (loan.status === 'Active') {
+                  <button type="button" class="btn-pay-emi" (click)="payEmi(loan.id)">
+                    <i class="bi bi-check2-circle"></i> Pay EMI ({{ loan.emi | inr }})
+                  </button>
+                  <span class="auto-debit-note"><i class="bi bi-shield-lock"></i> Auto-debit protected</span>
+                } @else {
+                  <span class="pending-review-note"><i class="bi bi-hourglass-split"></i> Application is currently being verified by credit team</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="loans-empty-banner">
+          <div class="empty-icon-wrap"><i class="bi bi-bank"></i></div>
+          <div>
+            <h3>No Active Loans or Credit Lines</h3>
+            <p>You have an active pre-approved credit limit of up to ₹10,00,000 at special interest rates starting from 8.4% p.a.</p>
+          </div>
+          <button type="button" class="primary-btn" (click)="openLoanModal()">Claim Credit Limit</button>
+        </div>
+      }
+    </div>
+  </article>
+</section>
+
+<!-- Lower Grid: Recent Transactions & Savings Goals -->
+<section class="dashboard-grid lower-grid">
+  <!-- Left: Recent Transactions Table -->
+  <article class="bank-card transactions-card">
+    <div class="card-heading">
+      <div>
+        <h2>Recent Account Activity</h2>
+        <p>Latest credits and debits across all vaults</p>
+      </div>
+      <a class="text-link" routerLink="/user/transactions">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <div class="transaction-list">
+      @for (txn of bank.transactions().slice(0, 5); track txn.id) {
+        <div class="transaction-row">
+          <span class="transaction-icon" [class.credit]="txn.type === 'credit'">
+            <i class="bi" [ngClass]="txn.icon"></i>
+          </span>
+          <div class="transaction-name">
+            <strong>{{ txn.merchant }}</strong>
+            <span>{{ txn.category }} · {{ txn.date | date:'d MMM yyyy' }}</span>
+          </div>
+          <div class="transaction-amount" [class.credit]="txn.type === 'credit'">
+            <strong>{{ txn.type === 'credit' ? '+' : '-' }}{{ txn.amount | inr }}</strong>
+            <span>{{ txn.status }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+
+  <!-- Right Side Stack: Savings Goal & Upcoming Bills -->
+  <div class="side-stack">
+    <article class="bank-card savings-goal">
+      <div class="card-heading">
+        <div>
+          <h2>Emergency Fund Vault <span class="goal-emoji">🛡️</span></h2>
+          <p>6-month liquid cushion target</p>
+        </div>
+        <span class="status-pill success">{{ emergencyFundPercent() }}% Reached</span>
+      </div>
+
+      <div class="goal-figures">
+        <strong>{{ emergencyFundCurrent() | inr:'1.0-0' }}</strong>
+        <span>/ {{ emergencyFundTarget | inr:'1.0-0' }} goal</span>
+      </div>
+
+      <div class="progress-track">
+        <span [style.width.%]="emergencyFundPercent()"></span>
+      </div>
+
+      <div class="goal-meta">
+        <span>₹1,40,000 remaining to complete</span>
+      </div>
+
+      <button type="button" class="primary-btn full-btn margin-top-md" (click)="addToEmergencyFund()">
+        <i class="bi bi-plus-lg"></i> Add ₹10,000 to Vault
+      </button>
+    </article>
+
+    <article class="bank-card bills-card">
+      <div class="card-heading">
+        <div>
+          <h2>Upcoming Due Bills</h2>
+          <p>Auto-debit scheduled protection</p>
+        </div>
+        <a class="pay-bills-link" routerLink="/user/payments">Pay All</a>
+      </div>
+
+      @for (bill of bills; track bill.name) {
+        <div class="bill-row">
+          <span class="bill-icon" [class]="bill.color"><i class="bi" [ngClass]="bill.icon"></i></span>
+          <div>
+            <strong>{{ bill.name }}</strong>
+            <span>{{ bill.due }}</span>
+          </div>
+          <strong>{{ bill.amount | inr }}</strong>
+        </div>
+      }
+    </article>
+  </div>
+</section>
+
+<!-- Banking Tips Section -->
+<section class="tips-section">
+  <div class="section-mini-head">
+    <h2>NeoBank Wealth Insights & Security Tips</h2>
+    <a routerLink="/user/analytics">Explore Financial Analytics <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="tips-grid">
+    @for (tip of tips; track tip.title) {
+      <article class="tip-card bank-card">
+        <span class="tip-icon"><i class="bi" [ngClass]="tip.icon"></i></span>
+        <div>
+          <h3>{{ tip.title }}</h3>
+          <p>{{ tip.detail }}</p>
+        </div>
+        <i class="bi bi-chevron-right"></i>
+      </article>
+    }
+  </div>
+</section>
+
+<!-- Interactive Modal: Create New Account -->
+@if (showCreateAccountModal()) {
+  <div class="modal-backdrop-custom" (click)="closeCreateAccountModal()">
+    <div class="modal-card-custom bank-card" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2><i class="bi bi-folder-plus text-primary"></i> Open New Bank Account</h2>
+        <button type="button" class="modal-close-btn" (click)="closeCreateAccountModal()"><i class="bi bi-x"></i></button>
+      </div>
+      <form (ngSubmit)="submitCreateAccount()" class="modal-body">
+        <div class="form-group mb-3">
+          <label>Account Name / Nickname</label>
+          <input type="text" [(ngModel)]="newAccountName" name="accName" required class="form-input-custom" placeholder="e.g. Vacation Savings" />
+        </div>
+        <div class="form-group mb-3">
+          <label>Account Type</label>
+          <select [(ngModel)]="newAccountType" name="accType" class="form-input-custom">
+            <option value="Savings">Savings Account (6.5% interest)</option>
+            <option value="Current">Current Account (Zero balance limit)</option>
+            <option value="Salary">Salary Account (Corporate benefits)</option>
+            <option value="Joint">Joint Account (Shared family access)</option>
+          </select>
+        </div>
+        <div class="form-group mb-4">
+          <label>Initial Deposit Amount (₹)</label>
+          <input type="number" [(ngModel)]="newAccountInitialDeposit" name="accDeposit" required min="500" class="form-input-custom" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" (click)="closeCreateAccountModal()">Cancel</button>
+          <button type="submit" class="primary-btn"><i class="bi bi-check-circle"></i> Create Bank Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Interactive Modal: Apply for Loan / Credit Line -->
+@if (showLoanModal()) {
+  <div class="modal-backdrop-custom" (click)="closeLoanModal()">
+    <div class="modal-card-custom bank-card loan-modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2><i class="bi bi-cash-coin text-primary"></i> Apply for Instant Loan Facility</h2>
+        <button type="button" class="modal-close-btn" (click)="closeLoanModal()"><i class="bi bi-x"></i></button>
+      </div>
+      <form (ngSubmit)="submitLoanApplication()" class="modal-body">
+        <div class="form-group mb-3">
+          <label>Select Loan / Credit Line Facility</label>
+          <select [(ngModel)]="newLoanType" name="lType" class="form-input-custom">
+            <option value="Personal Instant Credit Line">Personal Instant Credit Line (10.5% p.a. - Zero paperwork)</option>
+            <option value="Home Improvement Vault Loan">Home Improvement Vault Loan (8.4% p.a. - Special rate)</option>
+            <option value="Auto & Electric Vehicle Advance">Auto & Electric Vehicle Advance (9.2% p.a. - Green rebate)</option>
+            <option value="Education & Skill Advance">Education & Skill Advance (8.8% p.a. - Student friendly)</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-3">
+          <label>Required Loan Amount (₹)</label>
+          <input type="number" [(ngModel)]="newLoanAmount" name="lAmount" required min="10000" step="10000" class="form-input-custom" />
+          <div class="amount-chips mt-2">
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 100000">₹1 Lakh</button>
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 250000">₹2.5 Lakh</button>
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 500000">₹5 Lakh</button>
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 1000000">₹10 Lakh</button>
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label>Repayment Tenure</label>
+          <select [(ngModel)]="newLoanTenure" name="lTenure" class="form-input-custom">
+            <option value="12 Months">12 Months (1 Year)</option>
+            <option value="24 Months">24 Months (2 Years)</option>
+            <option value="36 Months">36 Months (3 Years)</option>
+            <option value="60 Months">60 Months (5 Years)</option>
+            <option value="120 Months">120 Months (10 Years)</option>
+          </select>
+        </div>
+
+        <div class="emi-simulator-panel mb-4">
+          <div class="emi-sim-top">
+            <span>Estimated Monthly EMI</span>
+            <strong>{{ calculatedEmi() | inr }} / mo</strong>
+          </div>
+          <div class="emi-sim-details">
+            <span><i class="bi bi-check2"></i> Zero Processing Fee</span>
+            <span><i class="bi bi-lightning-charge-fill text-warning"></i> Instant 3-Minute Disbursal to Neo Primary</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" (click)="closeLoanModal()">Cancel</button>
+          <button type="submit" class="primary-btn"><i class="bi bi-shield-check"></i> Disburse {{ newLoanAmount | inr }} Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+

@@ -1,0 +1,110 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Enterprise Ledger Stream</p>
+    <h1>System Audit & Transactions</h1>
+    <p class="page-subtitle">Real-time settlement monitor for IMPS, UPI, NEFT, and card transactions across all customer vaults.</p>
+  </div>
+  <div class="head-actions">
+    <button type="button" class="secondary-btn" (click)="bank.addMoney(0, 'System audit report exported as CSV')">
+      <i class="bi bi-download"></i> Export Audit Log (.CSV)
+    </button>
+  </div>
+</section>
+
+<!-- Filter Control Bar -->
+<section class="bank-card filter-bar" appCardElevation>
+  <div class="filter-group search-group">
+    <label for="searchQuery">Search Reference ID / Merchant</label>
+    <div class="search-input-wrap">
+      <i class="bi bi-search"></i>
+      <input id="searchQuery" type="text" [(ngModel)]="searchQuery" placeholder="Search settlement reference code, payee..." class="filter-input" />
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <label for="typeFilter">Direction</label>
+    <select id="typeFilter" [(ngModel)]="typeFilter" class="filter-select">
+      <option value="all">All Movements</option>
+      <option value="credit">Inflow Credits (+)</option>
+      <option value="debit">Outflow Debits (-)</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="statusFilter">Settlement Status</label>
+    <select id="statusFilter" [(ngModel)]="statusFilter" class="filter-select">
+      <option value="all">All Settlements</option>
+      <option value="successful">Successful</option>
+      <option value="pending">Pending Settlement</option>
+    </select>
+  </div>
+</section>
+
+<!-- Transactions Table -->
+<section class="bank-card table-panel" appCardElevation>
+  <div class="card-heading">
+    <div>
+      <h2>Global Settlement Ledger</h2>
+      <p>Showing {{ filteredTxns().length }} settlements matching filter parameters</p>
+    </div>
+    <span class="badge bg-success">Live Stream Synced</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Reference ID</th>
+          <th>Payee / Merchant</th>
+          <th>Category</th>
+          <th>Vault Account</th>
+          <th>Direction</th>
+          <th class="text-end">Amount (INR)</th>
+          <th class="text-center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (txn of filteredTxns(); track txn.id) {
+          <tr>
+            <td>
+              <strong>{{ txn.date | date:'dd MMM yyyy' }}</strong>
+              <small>{{ txn.date | date:'hh:mm:ss a' }}</small>
+            </td>
+            <td><code class="txn-code">{{ txn.id }}</code></td>
+            <td>
+              <div class="merchant-cell">
+                <span class="merchant-icon" [class.credit]="txn.type === 'credit'"><i class="bi" [ngClass]="txn.icon"></i></span>
+                <div>
+                  <strong>{{ txn.merchant }}</strong>
+                  <small>{{ txn.senderOrRecipient || 'Verified transfer' }}</small>
+                </div>
+              </div>
+            </td>
+            <td><span class="category-pill">{{ txn.category }}</span></td>
+            <td><code>{{ txn.accountId || 'primary' }}</code></td>
+            <td>
+              <span class="type-badge" [class.credit]="txn.type === 'credit'">
+                <i class="bi" [ngClass]="txn.type === 'credit' ? 'bi-arrow-down-left' : 'bi-arrow-up-right'"></i>
+                {{ txn.type | uppercase }}
+              </span>
+            </td>
+            <td class="text-end font-mono" [class.credit-text]="txn.type === 'credit'">
+              <strong>{{ txn.type === 'credit' ? '+' : '-' }}{{ txn.amount | inr }}</strong>
+            </td>
+            <td class="text-center">
+              <span class="status-pill success"><i class="bi bi-check-circle-fill"></i> {{ txn.status }}</span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" class="text-center empty-cell">
+              <i class="bi bi-clock-history empty-icon"></i>
+              <p>No transactions recorded matching specified criteria.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

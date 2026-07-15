@@ -1,0 +1,232 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">System Vaults & Ledgers</p>
+    <h1>Account Management Console</h1>
+    <p class="page-subtitle">Govern customer bank vaults, freeze suspicious balances, and provision corporate or joint ledgers.</p>
+  </div>
+  <div class="head-actions">
+    <button type="button" class="primary-btn" (click)="openCreateModal()">
+      <i class="bi bi-folder-plus"></i> Provision Bank Account
+    </button>
+  </div>
+</section>
+
+<!-- Summary Stats Banner -->
+<section class="admin-accounts-stats mb-4">
+  <div class="stat-box bank-card" appCardElevation>
+    <div class="stat-icon blue"><i class="bi bi-wallet2"></i></div>
+    <div>
+      <span>Total System Vaults</span>
+      <strong>{{ bank.accountsList().length }}</strong>
+    </div>
+  </div>
+  <div class="stat-box bank-card" appCardElevation>
+    <div class="stat-icon green"><i class="bi bi-cash-stack"></i></div>
+    <div>
+      <span>Total System Liquidity</span>
+      <strong>{{ totalSystemDeposits() | inr:'1.2-2' }}</strong>
+    </div>
+  </div>
+  <div class="stat-box bank-card" appCardElevation>
+    <div class="stat-icon violet"><i class="bi bi-shield-check"></i></div>
+    <div>
+      <span>Active Vaults Ratio</span>
+      <strong>100% Operational</strong>
+    </div>
+  </div>
+</section>
+
+<!-- Filter & Search Bar -->
+<section class="bank-card filter-bar" appCardElevation>
+  <div class="filter-group search-group">
+    <label for="searchQuery">Search Accounts</label>
+    <div class="search-input-wrap">
+      <i class="bi bi-search"></i>
+      <input id="searchQuery" type="text" [(ngModel)]="searchQuery" placeholder="Search by account title, number, or holder name..." class="filter-input" />
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <label for="typeFilter">Account Type</label>
+    <select id="typeFilter" [(ngModel)]="typeFilter" class="filter-select">
+      <option value="all">All Vault Types (Savings, Current, Salary)</option>
+      <option value="Savings">Savings Accounts</option>
+      <option value="Current">Current Accounts</option>
+      <option value="Salary">Salary Accounts</option>
+      <option value="Joint">Joint Accounts</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="statusFilter">Status Filter</label>
+    <select id="statusFilter" [(ngModel)]="statusFilter" class="filter-select">
+      <option value="all">All Statuses</option>
+      <option value="active">Active Operational</option>
+      <option value="frozen">Frozen / Restricted</option>
+    </select>
+  </div>
+</section>
+
+<!-- Accounts Table -->
+<section class="bank-card table-panel" appCardElevation>
+  <div class="card-heading">
+    <div>
+      <h2>System Accounts & Vault Ledgers</h2>
+      <p>Showing {{ filteredAccounts().length }} vaults matching active governance filter</p>
+    </div>
+    <span class="badge bg-primary">System Ledger Registry</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Account Title</th>
+          <th>Account Number</th>
+          <th>Holder Name</th>
+          <th>Vault Type</th>
+          <th class="text-end">Current Balance</th>
+          <th>Status</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (acc of filteredAccounts(); track acc.id) {
+          <tr>
+            <td>
+              <div class="acc-title-cell">
+                <span class="vault-icon" [class]="acc.color"><i class="bi bi-wallet2"></i></span>
+                <div>
+                  <strong>{{ acc.name }}</strong>
+                  <small>{{ acc.id }}</small>
+                </div>
+              </div>
+            </td>
+            <td><code class="acc-num">{{ acc.number }}</code></td>
+            <td>
+              <strong>{{ acc.holderName || 'Venkat Raman' }}</strong>
+              <small>{{ acc.holderId || 'NEO-894210' }}</small>
+            </td>
+            <td><span class="type-pill">{{ acc.accountType || 'Savings' }}</span></td>
+            <td class="text-end font-mono">
+              <strong>{{ acc.balance | inr:'1.2-2' }}</strong>
+            </td>
+            <td>
+              <span class="status-pill" [ngClass]="acc.status === 'active' ? 'success' : 'danger'">
+                <i class="bi" [ngClass]="acc.status === 'active' ? 'bi-check-circle-fill' : 'bi-snow'"></i>
+                {{ acc.status === 'active' ? 'Active' : 'Frozen' }}
+              </span>
+            </td>
+            <td class="text-end">
+              <div class="action-btn-group">
+                <button type="button" class="btn-action btn-view" (click)="viewAccount(acc)" title="View Details">
+                  <i class="bi bi-eye-fill"></i>
+                </button>
+                <button type="button" class="btn-action" [ngClass]="acc.status === 'active' ? 'btn-freeze' : 'btn-unfreeze'" (click)="toggleFreeze(acc)" [title]="acc.status === 'active' ? 'Freeze Account' : 'Unfreeze Account'">
+                  <i class="bi" [ngClass]="acc.status === 'active' ? 'bi-snow' : 'bi-sun-fill'"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="text-center empty-cell">
+              <i class="bi bi-folder2-open empty-icon"></i>
+              <p>No system accounts found matching filter selection.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Interactive Modal: View Account Details -->
+@if (selectedAccount(); as a) {
+  <div class="modal-backdrop-custom" (click)="closeViewModal()">
+    <div class="modal-card-custom bank-card view-modal" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2><i class="bi bi-wallet2 text-primary"></i> Vault Ledger Inspection</h2>
+        <button type="button" class="modal-close-btn" (click)="closeViewModal()"><i class="bi bi-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="view-acc-head" [class]="a.color">
+          <div class="head-icon"><i class="bi bi-wallet2"></i></div>
+          <div>
+            <h3>{{ a.name }}</h3>
+            <p>{{ a.type }} · Code: {{ a.id }}</p>
+            <span class="acc-num-pill">{{ a.number }}</span>
+          </div>
+        </div>
+
+        <div class="details-grid mt-4">
+          <div class="detail-item">
+            <span>Account Holder</span>
+            <strong>{{ a.holderName || 'Venkat Raman' }}</strong>
+          </div>
+          <div class="detail-item">
+            <span>Customer ID</span>
+            <strong>{{ a.holderId || 'NEO-894210' }}</strong>
+          </div>
+          <div class="detail-item">
+            <span>Current Balance</span>
+            <strong class="text-primary fs-5">{{ a.balance | inr:'1.2-2' }}</strong>
+          </div>
+          <div class="detail-item">
+            <span>Vault Operational Status</span>
+            <span class="status-pill d-inline-block" [ngClass]="a.status === 'active' ? 'success' : 'danger'">
+              {{ a.status | uppercase }}
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-actions mt-4">
+          <button type="button" class="secondary-btn" (click)="toggleFreeze(a)">
+            <i class="bi" [ngClass]="a.status === 'active' ? 'bi-snow' : 'bi-sun-fill'"></i>
+            {{ a.status === 'active' ? 'Freeze Vault' : 'Unfreeze Vault' }}
+          </button>
+          <button type="button" class="primary-btn" (click)="closeViewModal()">Close View</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Interactive Modal: Create Bank Account -->
+@if (showCreateModal()) {
+  <div class="modal-backdrop-custom" (click)="closeCreateModal()">
+    <div class="modal-card-custom bank-card" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2><i class="bi bi-folder-plus text-primary"></i> Provision New System Vault</h2>
+        <button type="button" class="modal-close-btn" (click)="closeCreateModal()"><i class="bi bi-x"></i></button>
+      </div>
+      <form (ngSubmit)="submitCreateAccount()" class="modal-body">
+        <div class="form-group mb-3">
+          <label>Account Title / Nickname</label>
+          <input type="text" [(ngModel)]="newAccName" name="accName" required class="form-input-custom" placeholder="e.g. Enterprise Salary Ledger" />
+        </div>
+        <div class="form-group mb-3">
+          <label>Account Holder Name</label>
+          <input type="text" [(ngModel)]="newAccHolder" name="accHolder" required class="form-input-custom" />
+        </div>
+        <div class="form-group mb-3">
+          <label>Vault Type</label>
+          <select [(ngModel)]="newAccType" name="accType" class="form-input-custom">
+            <option value="Savings">Savings Account (Standard interest)</option>
+            <option value="Current">Current Account (Corporate zero balance)</option>
+            <option value="Salary">Salary Account (Corporate payroll)</option>
+            <option value="Joint">Joint Account (Multi-user signatures)</option>
+          </select>
+        </div>
+        <div class="form-group mb-4">
+          <label>Initial Liquidity Deposit (₹)</label>
+          <input type="number" [(ngModel)]="newAccDeposit" name="accDeposit" required min="0" class="form-input-custom" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" (click)="closeCreateModal()">Cancel</button>
+          <button type="submit" class="primary-btn"><i class="bi bi-check-circle"></i> Provision Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

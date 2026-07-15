@@ -1,0 +1,172 @@
+.onboarding-shell { background: #0b1323; color: #f8fafc; min-height: 100vh; padding-bottom: 80px; font-family: 'Inter', sans-serif; }
+.landing-header { background: rgba(11, 19, 35, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(16px); }
+.header-container { align-items: center; display: flex; justify-content: space-between; max-width: 1240px; margin: 0 auto; padding: 18px 24px; }
+.brand-logo { align-items: center; display: flex; gap: 10px; text-decoration: none; }
+.brand-mark { align-items: center; background: #2563eb; border-radius: 10px; color: #fff; display: grid; font-size: 18px; height: 38px; place-items: center; width: 38px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); }
+.brand-text { color: #fff; font-size: 20px; font-weight: 800; letter-spacing: -0.6px; }
+.brand-text span { color: #60a5fa; }
+.header-right { display: flex; align-items: center; gap: 20px; }
+.secure-badge { background: rgba(22, 163, 74, 0.15); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 20px; color: #4ade80; font-size: 12px; font-weight: 600; padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px; }
+.exit-link { color: #94a3b8; font-size: 13px; text-decoration: none; transition: 0.2s; }
+.exit-link:hover { color: #fff; }
+
+.onboarding-main { max-width: 980px; margin: 0 auto; padding: 40px 20px; }
+
+/* Stepper Bar */
+.stepper-bar-wrapper { margin-bottom: 40px; background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px 24px; backdrop-filter: blur(8px); }
+.stepper-bar { display: flex; align-items: center; justify-content: space-between; }
+.step-item { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; opacity: 0.5; }
+.step-item.active { opacity: 1; }
+.step-item.completed { opacity: 0.9; }
+.step-circle { align-items: center; background: rgba(255, 255, 255, 0.1); border-radius: 50%; color: #fff; display: grid; font-size: 14px; font-weight: 700; height: 36px; place-items: center; width: 36px; transition: 0.3s; }
+.step-item.active .step-circle { background: #2563eb; box-shadow: 0 0 16px rgba(37, 99, 235, 0.6); }
+.step-item.completed .step-circle { background: #16a34a; }
+.step-label { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+.step-item.active .step-label { color: #60a5fa; }
+.step-line { flex: 1; height: 2px; background: rgba(255, 255, 255, 0.1); margin: 0 12px; transition: 0.3s; }
+.step-line.completed { background: #16a34a; }
+
+/* Wizard Content & Card */
+.step-card, .success-card { background: rgba(30, 41, 59, 0.65); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 44px 40px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); backdrop-filter: blur(16px); }
+.step-header { margin-bottom: 36px; text-align: center; }
+.step-eyebrow { color: #60a5fa; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 8px; }
+.step-header h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.8px; margin: 0 0 12px; color: #fff; }
+.step-header p { color: #94a3b8; font-size: 15px; max-width: 620px; margin: 0 auto; }
+
+/* Step 1: Account Types */
+.account-types-grid { display: grid; gap: 24px; grid-template-columns: repeat(3, 1fr); margin-bottom: 40px; }
+.type-option { background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 28px 24px; cursor: pointer; transition: 0.3s; }
+.type-option:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(96, 165, 250, 0.3); transform: translateY(-3px); }
+.type-option.selected { background: rgba(37, 99, 235, 0.12); border-color: #3b82f6; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2); }
+.option-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.type-icon { border-radius: 14px; display: grid; font-size: 22px; height: 50px; place-items: center; width: 50px; }
+.type-icon.blue { background: rgba(37, 99, 235, 0.2); color: #60a5fa; }
+.type-icon.violet { background: rgba(124, 58, 237, 0.2); color: #c084fc; }
+.type-icon.green { background: rgba(22, 163, 74, 0.2); color: #4ade80; }
+.radio-check { color: rgba(255, 255, 255, 0.15); font-size: 22px; transition: 0.2s; }
+.type-option.selected .radio-check { color: #60a5fa; }
+.type-option h3 { font-size: 20px; font-weight: 700; margin: 0 0 10px; color: #fff; }
+.type-desc { color: #94a3b8; font-size: 13px; line-height: 1.6; margin: 0 0 20px; min-height: 42px; }
+.type-benefits { list-style: none; padding: 0; margin: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 16px; }
+.type-benefits li { color: #cbd5e1; font-size: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.type-benefits li i { color: #4ade80; font-size: 16px; }
+
+/* Forms */
+.form-section-title { color: #60a5fa; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 8px; }
+.margin-top-lg { margin-top: 36px; }
+.form-grid { display: grid; gap: 20px; grid-template-columns: repeat(2, 1fr); }
+.form-group.full-width { grid-column: 1 / -1; }
+.app-form-label { color: #cbd5e1; font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px; }
+.app-input, .app-select { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #fff; font-size: 14px; height: 46px; padding: 0 16px; width: 100%; transition: 0.2s; }
+.app-input:focus, .app-select:focus { border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); outline: none; }
+.app-select option { background: #0f172a; color: #fff; }
+.form-hint { color: #94a3b8; font-size: 12px; display: block; margin-top: 6px; }
+
+/* Step Actions */
+.step-actions { display: flex; justify-content: flex-end; margin-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 24px; }
+.dual-actions { justify-content: space-between; }
+.secondary-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #fff; font-size: 14px; font-weight: 600; padding: 13px 24px; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.secondary-btn:hover { background: rgba(255, 255, 255, 0.12); border-color: #60a5fa; }
+.primary-btn { background: #2563eb; border: 1px solid #2563eb; border-radius: 12px; color: #fff; font-size: 14px; font-weight: 600; padding: 13px 28px; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35); }
+.primary-btn:hover:not([disabled]) { background: #1d4ed8; transform: translateY(-1px); }
+.primary-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* Step 3: KYC Upload */
+.kyc-upload-grid { display: grid; gap: 24px; grid-template-columns: repeat(2, 1fr); margin-bottom: 24px; }
+.upload-panel { background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 24px; text-align: center; transition: 0.3s; }
+.upload-panel.uploaded { border-style: solid; border-color: rgba(74, 222, 128, 0.4); background: rgba(22, 163, 74, 0.05); }
+.upload-header { display: flex; justify-content: space-between; align-items: flex-start; text-align: left; margin-bottom: 20px; }
+.upload-header h3 { font-size: 16px; font-weight: 700; margin: 0 0 4px; color: #fff; }
+.upload-header p { color: #94a3b8; font-size: 12px; margin: 0; }
+.status-badge.success { background: rgba(22, 163, 74, 0.2); color: #4ade80; border-radius: 16px; font-size: 11px; font-weight: 700; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; }
+.drop-zone { cursor: pointer; padding: 30px 16px; border-radius: 14px; background: rgba(15, 23, 42, 0.5); transition: 0.2s; }
+.drop-zone:hover { background: rgba(30, 41, 59, 0.8); }
+.upload-icon { font-size: 36px; color: #60a5fa; display: block; margin-bottom: 12px; }
+.drop-zone strong { display: block; font-size: 14px; color: #fff; margin-bottom: 6px; }
+.file-name { color: #94a3b8; font-size: 12px; }
+.outline-btn { background: transparent; border: 1px solid rgba(96, 165, 250, 0.4); border-radius: 10px; color: #60a5fa; font-size: 12px; font-weight: 600; padding: 8px 16px; cursor: pointer; transition: 0.2s; }
+.outline-btn:hover { background: rgba(37, 99, 235, 0.15); }
+.kyc-info-box { background: rgba(37, 99, 235, 0.1); border: 1px solid rgba(96, 165, 250, 0.25); border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+
+/* Step 5: Initial Deposit */
+.amount-selector { margin-bottom: 30px; }
+.deposit-chips { display: flex; gap: 14px; margin-bottom: 18px; }
+.deposit-chip { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #fff; font-size: 16px; font-weight: 700; padding: 14px 24px; cursor: pointer; transition: 0.2s; flex: 1; }
+.deposit-chip:hover { border-color: #60a5fa; }
+.deposit-chip.active { background: #2563eb; border-color: #2563eb; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); }
+.custom-amount-input { display: flex; align-items: center; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 0 20px; max-width: 400px; }
+.custom-amount-input span { font-size: 20px; font-weight: 700; color: #60a5fa; margin-right: 10px; }
+.custom-amount-input input { background: transparent; border: none; color: #fff; font-size: 18px; font-weight: 700; height: 52px; width: 100%; outline: none; }
+.payment-methods-grid { display: grid; gap: 18px; grid-template-columns: repeat(2, 1fr); }
+.method-card { background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 22px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 16px; position: relative; }
+.method-card:hover { background: rgba(255, 255, 255, 0.06); }
+.method-card.selected { background: rgba(37, 99, 235, 0.12); border-color: #3b82f6; }
+.method-card i.bi-qr-code-scan, .method-card i.bi-bank { font-size: 28px; }
+.method-card strong { display: block; font-size: 15px; color: #fff; margin-bottom: 4px; }
+.method-card span { color: #94a3b8; font-size: 12px; }
+.check-indicator { position: absolute; right: 20px; color: rgba(255, 255, 255, 0.1); font-size: 20px; }
+.method-card.selected .check-indicator { color: #60a5fa; }
+
+/* Step 6: Review Grid */
+.review-grid { display: grid; gap: 20px; grid-template-columns: repeat(2, 1fr); margin-bottom: 30px; }
+.review-box { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 22px 24px; }
+.review-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 14px; }
+.review-header h3 { font-size: 15px; font-weight: 700; margin: 0; color: #fff; }
+.edit-link { background: transparent; border: none; color: #60a5fa; font-size: 12px; font-weight: 600; cursor: pointer; }
+.review-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px; }
+.review-row span { color: #94a3b8; }
+.review-row strong { color: #e2e8f0; font-weight: 600; text-align: right; max-width: 65%; }
+.text-green { color: #4ade80 !important; }
+.status-pill.success { background: rgba(22, 163, 74, 0.2); color: #4ade80; border-radius: 12px; font-size: 11px; font-weight: 700; padding: 3px 10px; }
+.terms-acceptance { background: rgba(255, 255, 255, 0.03); border-radius: 14px; padding: 16px 20px; font-size: 13px; color: #cbd5e1; }
+.terms-checkbox { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+.terms-checkbox input { margin-top: 3px; }
+
+/* Step 7: Success Card & Preview */
+.success-card { max-width: 780px; margin: 0 auto; }
+.success-icon-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto 24px; }
+.success-icon { background: #16a34a; border-radius: 50%; color: #fff; font-size: 36px; display: grid; place-items: center; width: 100%; height: 100%; position: relative; z-index: 2; box-shadow: 0 0 30px rgba(22, 163, 74, 0.6); }
+.success-title { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin: 8px 0 14px; color: #fff; }
+.success-subtitle { color: #94a3b8; font-size: 16px; max-width: 540px; margin: 0 auto 36px; line-height: 1.6; }
+
+.generated-details-grid { display: grid; gap: 18px; grid-template-columns: repeat(2, 1fr); margin-bottom: 36px; text-align: left; }
+.detail-tile { background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px; }
+.tile-label { color: #94a3b8; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.tile-value { display: block; font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.4px; }
+.tile-value.highlight-blue { color: #60a5fa; }
+.detail-tile small { color: #64748b; font-size: 11px; display: block; margin-top: 4px; }
+
+.virtual-card-preview { background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(37, 99, 235, 0.3); max-width: 380px; margin: 0 auto 40px; padding: 24px 28px; text-align: left; }
+.card-chip-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.v-logo { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+.v-logo i { color: #60a5fa; }
+.v-badge { background: rgba(255, 255, 255, 0.15); border-radius: 6px; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; }
+.v-number { font-size: 20px; font-weight: 700; letter-spacing: 3px; color: #fff; margin-bottom: 24px; }
+.v-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.v-bottom small { color: #94a3b8; font-size: 9px; display: block; letter-spacing: 1px; }
+.v-bottom strong { color: #fff; font-size: 13px; font-weight: 600; }
+.v-network { font-size: 22px; font-weight: 900; font-style: italic; color: #fff; }
+
+.success-actions { display: flex; justify-content: center; gap: 16px; }
+.proceed-login-btn { font-size: 16px; padding: 15px 32px; border-radius: 14px; }
+
+.fade-in { animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .account-types-grid, .form-grid, .kyc-upload-grid, .payment-methods-grid, .review-grid, .generated-details-grid { grid-template-columns: 1fr; }
+  .deposit-chips { flex-wrap: wrap; }
+  .step-card, .success-card { padding: 28px 20px; }
+}
+@media (max-width: 575.98px) {
+  .step-card, .success-card { padding: 22px 14px; border-radius: 16px; }
+  .stepper-bar-wrapper { padding: 10px 12px; }
+  .step-circle { width: 30px; height: 30px; font-size: 13px; }
+  .step-item span { display: none; }
+  .success-title { font-size: 26px; }
+  .virtual-card-preview { padding: 18px 20px; }
+  .v-number { font-size: 16px; letter-spacing: 2px; }
+}

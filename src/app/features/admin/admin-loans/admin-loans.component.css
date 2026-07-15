@@ -1,0 +1,15 @@
+.table-panel { padding: 26px; }
+.table-responsive { overflow-x: auto; margin-top: 16px; }
+.admin-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.admin-table th { background: var(--bg-alt, #f8fafc); color: var(--ink-muted); font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.8px; padding: 14px 16px; border-bottom: 2px solid var(--line); text-align: left; white-space: nowrap; }
+.admin-table td { padding: 16px; border-bottom: 1px solid var(--line); vertical-align: middle; color: var(--ink); }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: rgba(37, 99, 235, 0.03); }
+
+.product-pill { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 12px; }
+
+.action-btn-group { display: inline-flex; gap: 6px; }
+.btn-sanction { background: #10b981; color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; }
+.btn-sanction:hover { background: #059669; }
+.btn-decline { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; width: 30px; height: 30px; display: grid; place-items: center; cursor: pointer; transition: 0.2s; }
+.btn-decline:hover { background: #dc2626; color: #fff; }

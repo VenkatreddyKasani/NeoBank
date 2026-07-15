@@ -1,0 +1,23 @@
+.table-panel { padding: 26px; }
+.table-responsive { overflow-x: auto; margin-top: 16px; }
+.admin-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.admin-table th { background: var(--bg-alt, #f8fafc); color: var(--ink-muted); font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.8px; padding: 14px 16px; border-bottom: 2px solid var(--line); text-align: left; white-space: nowrap; }
+.admin-table td { padding: 16px; border-bottom: 1px solid var(--line); vertical-align: middle; color: var(--ink); }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: rgba(37, 99, 235, 0.03); }
+
+.user-cell { display: flex; align-items: center; gap: 12px; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; background: #eff6ff; color: #2563eb; display: grid; place-items: center; font-weight: 800; font-size: 13px; flex: 0 0 auto; }
+.avatar.warning { background: #fffbeb; color: #d97706; }
+.avatar.success { background: #ecfdf5; color: #10b981; }
+
+.doc-badge { background: var(--bg-alt, #f1f5f9); border: 1px solid var(--line); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; color: var(--ink-secondary); font-family: monospace; }
+
+.action-btn-group { display: inline-flex; gap: 10px; }
+.btn-approve { background: #10b981; color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; box-shadow: 0 2px 6px rgba(16,185,129,0.25); }
+.btn-approve:hover { background: #059669; }
+.btn-reject { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+.btn-reject:hover { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+.empty-cell { padding: 60px 20px !important; color: var(--ink-muted); }
+.empty-icon { font-size: 44px; display: block; margin-bottom: 12px; }

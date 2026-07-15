@@ -1,0 +1,28 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Regulatory & Audit Exports</p>
+    <h1>System Reports & Intelligence</h1>
+    <p class="page-subtitle">Generate RBI compliance dossiers, liquidity reserves statements, and operational audit trails.</p>
+  </div>
+</section>
+
+<!-- Reports Grid -->
+<section class="reports-grid">
+  @for (rep of reports; track rep.title) {
+    <article class="bank-card report-card" appCardElevation>
+      <div class="report-head">
+        <span class="report-icon"><i class="bi bi-file-earmark-bar-graph"></i></span>
+        <span class="status-pill success"><i class="bi bi-check-circle-fill"></i> {{ rep.status }}</span>
+      </div>
+      <h2>{{ rep.title }}</h2>
+      <p>{{ rep.desc }}</p>
+      <div class="report-meta">
+        <span><i class="bi bi-calendar-check"></i> {{ rep.date | date:'dd MMM yyyy' }}</span>
+        <span class="format-chip">{{ rep.format }}</span>
+      </div>
+      <button type="button" class="primary-btn full-btn mt-4" (click)="exportReport(rep.title)">
+        <i class="bi bi-download"></i> Download Report Package
+      </button>
+    </article>
+  }
+</section>

@@ -1,0 +1,177 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow"><i class="bi bi-shield-lock-fill text-danger"></i> System Governance & Audit</p>
+    <h1>System Administrator Console</h1>
+    <p class="page-subtitle">Real-time enterprise banking telemetry, KYC compliance verification, and operational oversight.</p>
+  </div>
+  <div class="head-actions">
+    <a routerLink="/admin/customers" class="secondary-btn"><i class="bi bi-people"></i> Manage Customers</a>
+    <a routerLink="/admin/accounts" class="primary-btn"><i class="bi bi-wallet2"></i> System Accounts</a>
+  </div>
+</section>
+
+<!-- Admin Core Metrics Grid (Requirement #6) -->
+<section class="admin-metrics-grid">
+  <!-- Card 1: Total Users -->
+  <article class="admin-metric-card bank-card" appCardElevation>
+    <div class="metric-icon-wrap blue"><i class="bi bi-people-fill"></i></div>
+    <div class="metric-content">
+      <span>Total Registered Users</span>
+      <strong>{{ totalUsersCount() }}</strong>
+      <small class="positive"><i class="bi bi-arrow-up-right"></i> +12.4% vs last month</small>
+    </div>
+  </article>
+
+  <!-- Card 2: Total Accounts -->
+  <article class="admin-metric-card bank-card" appCardElevation>
+    <div class="metric-icon-wrap violet"><i class="bi bi-wallet-fill"></i></div>
+    <div class="metric-content">
+      <span>Total Active Accounts</span>
+      <strong>{{ totalAccountsCount() }}</strong>
+      <small>Savings, Current & Salary Vaults</small>
+    </div>
+  </article>
+
+  <!-- Card 3: Today's Transactions -->
+  <article class="admin-metric-card bank-card" appCardElevation>
+    <div class="metric-icon-wrap green"><i class="bi bi-arrow-left-right"></i></div>
+    <div class="metric-content">
+      <span>Today's Transactions</span>
+      <strong>₹1,84,250</strong>
+      <small class="positive"><i class="bi bi-check-circle"></i> 42 successful settlements</small>
+    </div>
+  </article>
+
+  <!-- Card 4: Pending KYC -->
+  <article class="admin-metric-card bank-card" appCardElevation>
+    <div class="metric-icon-wrap amber"><i class="bi bi-person-exclamation"></i></div>
+    <div class="metric-content">
+      <span>Pending KYC Reviews</span>
+      <strong>{{ pendingKycCount() }}</strong>
+      <a routerLink="/admin/kyc" class="kyc-action-link">Review Applications <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </article>
+</section>
+
+<!-- Graphs Grid: Monthly Accounts Created & Monthly Transactions (Requirement #6) -->
+<section class="admin-charts-grid">
+  <!-- Chart 1 -->
+  <article class="bank-card chart-panel" appCardElevation>
+    <div class="card-heading">
+      <div>
+        <h2>Monthly Accounts Created</h2>
+        <p>Customer onboarding trend over the last 6 months</p>
+      </div>
+      <span class="badge bg-primary">Growth Telemetry</span>
+    </div>
+    <div class="chart-container">
+      <canvas #accountsChart></canvas>
+    </div>
+  </article>
+
+  <!-- Chart 2 -->
+  <article class="bank-card chart-panel" appCardElevation>
+    <div class="card-heading">
+      <div>
+        <h2>Monthly Transactions Volume</h2>
+        <p>System settlement velocity across IMPS, UPI, and Cards</p>
+      </div>
+      <span class="badge bg-success">Settlement Telemetry</span>
+    </div>
+    <div class="chart-container">
+      <canvas #transactionsChart></canvas>
+    </div>
+  </article>
+</section>
+
+<!-- Tables Grid: Recent Registrations & Recent Transactions -->
+<section class="admin-tables-grid margin-top-lg">
+  <!-- Left Table: Recent Registrations -->
+  <article class="bank-card admin-table-panel" appCardElevation>
+    <div class="card-heading">
+      <div>
+        <h2>Recent Customer Registrations</h2>
+        <p>Latest customer accounts opened via public onboarding</p>
+      </div>
+      <a routerLink="/admin/customers" class="text-link">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th>Email / ID</th>
+            <th>KYC Status</th>
+            <th>Account Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of recentRegistrations(); track user.id) {
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <span class="mini-avatar">{{ user.fullName.slice(0, 2).toUpperCase() }}</span>
+                  <div>
+                    <strong>{{ user.fullName }}</strong>
+                    <small>{{ user.phone }}</small>
+                  </div>
+                </div>
+              </td>
+              <td><code>{{ user.email }}</code></td>
+              <td>
+                <span class="status-pill" [ngClass]="user.kycStatus === 'Verified' ? 'success' : 'warning'">
+                  {{ user.kycStatus === 'Verified' ? 'Verified' : 'Pending Review' }}
+                </span>
+              </td>
+              <td>
+                <span class="status-pill" [ngClass]="user.status === 'active' ? 'success' : 'danger'">
+                  {{ user.status === 'active' ? 'Active' : 'Locked' }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- Right Table: Recent Transactions -->
+  <article class="bank-card admin-table-panel" appCardElevation>
+    <div class="card-heading">
+      <div>
+        <h2>System-Wide Transactions</h2>
+        <p>Real-time settlement stream across customer accounts</p>
+      </div>
+      <a routerLink="/admin/transactions" class="text-link">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Reference ID</th>
+            <th>Merchant / Payee</th>
+            <th>Category</th>
+            <th class="text-end">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (txn of recentSystemTransactions(); track txn.id) {
+            <tr>
+              <td><code>{{ txn.id }}</code></td>
+              <td>
+                <strong>{{ txn.merchant }}</strong>
+                <small>{{ txn.date | date:'dd MMM, hh:mm a' }}</small>
+              </td>
+              <td><span class="category-pill">{{ txn.category }}</span></td>
+              <td class="text-end font-mono" [class.credit-text]="txn.type === 'credit'">
+                <strong>{{ txn.type === 'credit' ? '+' : '-' }}{{ txn.amount | inr }}</strong>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

@@ -1,0 +1,201 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Customer Governance</p>
+    <h1>User Management Console</h1>
+    <p class="page-subtitle">Inspect customer KYC status, lock/unlock suspicious accounts, and govern portal access privileges.</p>
+  </div>
+  <div class="head-actions">
+    <button type="button" class="primary-btn" (click)="openAddModal()">
+      <i class="bi bi-person-plus-fill"></i> Provision New Customer
+    </button>
+  </div>
+</section>
+
+<!-- Filter & Search Bar -->
+<section class="bank-card filter-bar" appCardElevation>
+  <div class="filter-group search-group">
+    <label for="searchQuery">Search Customers</label>
+    <div class="search-input-wrap">
+      <i class="bi bi-search"></i>
+      <input id="searchQuery" type="text" [(ngModel)]="searchQuery" placeholder="Search by name, email, or mobile..." class="filter-input" />
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <label for="statusFilter">Status & KYC Filter</label>
+    <select id="statusFilter" [(ngModel)]="statusFilter" class="filter-select">
+      <option value="all">All Customers ({{ bank.usersList().length }})</option>
+      <option value="active">Active Accounts Only</option>
+      <option value="locked">Locked / Suspended</option>
+      <option value="pending">Pending KYC Review</option>
+    </select>
+  </div>
+</section>
+
+<!-- Users Table -->
+<section class="bank-card table-panel" appCardElevation>
+  <div class="card-heading">
+    <div>
+      <h2>Registered Customer Registry</h2>
+      <p>Showing {{ filteredUsers().length }} customers matching active criteria</p>
+    </div>
+    <span class="badge bg-primary">RBAC Admin Protected</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Customer Info</th>
+          <th>Contact & ID</th>
+          <th>Role</th>
+          <th>KYC Status</th>
+          <th>Account Status</th>
+          <th>Registered On</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of filteredUsers(); track user.id) {
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="avatar">{{ user.fullName.slice(0, 2).toUpperCase() }}</div>
+                <div>
+                  <strong>{{ user.fullName }}</strong>
+                  <small>{{ user.id }}</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <strong>{{ user.email }}</strong>
+              <small>{{ user.phone }}</small>
+            </td>
+            <td><span class="role-badge">{{ user.role | uppercase }}</span></td>
+            <td>
+              <span class="status-pill" [ngClass]="user.kycStatus === 'Verified' ? 'success' : 'warning'">
+                <i class="bi" [ngClass]="user.kycStatus === 'Verified' ? 'bi-patch-check-fill' : 'bi-clock'"></i>
+                {{ user.kycStatus === 'Verified' ? 'Verified' : 'Pending Review' }}
+              </span>
+            </td>
+            <td>
+              <span class="status-pill" [ngClass]="user.status === 'active' ? 'success' : 'danger'">
+                {{ user.status === 'active' ? 'Active' : 'Locked' }}
+              </span>
+            </td>
+            <td>
+              <strong>{{ user.createdAt | date:'dd MMM yyyy' }}</strong>
+            </td>
+            <td class="text-end">
+              <div class="action-btn-group">
+                <button type="button" class="btn-action btn-view" (click)="viewUser(user)" title="View Details">
+                  <i class="bi bi-eye-fill"></i>
+                </button>
+                <button type="button" class="btn-action" [ngClass]="user.status === 'active' ? 'btn-lock' : 'btn-unlock'" (click)="toggleLock(user)" [title]="user.status === 'active' ? 'Lock Account' : 'Unlock Account'">
+                  <i class="bi" [ngClass]="user.status === 'active' ? 'bi-lock-fill' : 'bi-unlock-fill'"></i>
+                </button>
+                <button type="button" class="btn-action btn-reset" (click)="resetUserPassword(user)" title="Reset Password">
+                  <i class="bi bi-key-fill"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="text-center empty-cell">
+              <i class="bi bi-people empty-icon"></i>
+              <p>No customer profiles found matching selected filters.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Interactive Modal: View Customer Details -->
+@if (selectedUser(); as u) {
+  <div class="modal-backdrop-custom" (click)="closeViewModal()">
+    <div class="modal-card-custom bank-card view-modal" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2><i class="bi bi-person-badge-fill text-primary"></i> Customer KYC Profile</h2>
+        <button type="button" class="modal-close-btn" (click)="closeViewModal()"><i class="bi bi-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="view-user-head">
+          <div class="view-avatar">{{ u.fullName.slice(0, 2).toUpperCase() }}</div>
+          <div>
+            <h3>{{ u.fullName }}</h3>
+            <p>{{ u.email }} · {{ u.phone }}</p>
+            <span class="customer-id-chip">{{ u.id }}</span>
+          </div>
+        </div>
+
+        <div class="details-grid mt-4">
+          <div class="detail-item">
+            <span>Aadhaar Number</span>
+            <strong>{{ u.aadhaar || '4444 •••• 6666' }}</strong>
+          </div>
+          <div class="detail-item">
+            <span>PAN Number</span>
+            <strong>{{ u.pan || 'ABCDE1234F' }}</strong>
+          </div>
+          <div class="detail-item">
+            <span>KYC Verification</span>
+            <span class="status-pill success d-inline-block">{{ u.kycStatus === 'Verified' ? 'Aadhaar Biometric Verified' : 'Pending Admin Verification' }}</span>
+          </div>
+          <div class="detail-item">
+            <span>Portal Account Status</span>
+            <span class="status-pill" [ngClass]="u.status === 'active' ? 'success' : 'danger'">{{ u.status | uppercase }}</span>
+          </div>
+          <div class="detail-item full-width">
+            <span>Registered Address</span>
+            <strong>{{ u.address ? (u.address.street + ', ' + u.address.city + ', ' + u.address.state + ' - ' + u.address.pincode) : '101, Residency Towers, Bengaluru - 560102' }}</strong>
+          </div>
+        </div>
+
+        <div class="modal-actions mt-4">
+          <button type="button" class="secondary-btn" (click)="toggleLock(u)">
+            <i class="bi" [ngClass]="u.status === 'active' ? 'bi-lock-fill' : 'bi-unlock-fill'"></i>
+            {{ u.status === 'active' ? 'Lock Account' : 'Unlock Account' }}
+          </button>
+          <button type="button" class="primary-btn" (click)="closeViewModal()">Close View</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Interactive Modal: Add New Customer -->
+@if (showAddModal()) {
+  <div class="modal-backdrop-custom" (click)="closeAddModal()">
+    <div class="modal-card-custom bank-card" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2><i class="bi bi-person-plus-fill text-primary"></i> Provision Customer Account</h2>
+        <button type="button" class="modal-close-btn" (click)="closeAddModal()"><i class="bi bi-x"></i></button>
+      </div>
+      <form (ngSubmit)="submitAddUser()" class="modal-body">
+        <div class="form-group mb-3">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="newUserName" name="userName" required class="form-input-custom" placeholder="e.g. Rohit Sharma" />
+        </div>
+        <div class="form-group mb-3">
+          <label>Email Address</label>
+          <input type="email" [(ngModel)]="newUserEmail" name="userEmail" required class="form-input-custom" placeholder="rohit@neobank.com" />
+        </div>
+        <div class="form-group mb-3">
+          <label>Mobile Number</label>
+          <input type="tel" [(ngModel)]="newUserPhone" name="userPhone" required class="form-input-custom" placeholder="+91 98222 33444" />
+        </div>
+        <div class="form-group mb-4">
+          <label>PAN Number</label>
+          <input type="text" [(ngModel)]="newUserPan" name="userPan" required class="form-input-custom" style="text-transform: uppercase;" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" (click)="closeAddModal()">Cancel</button>
+          <button type="submit" class="primary-btn"><i class="bi bi-check-circle"></i> Provision Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

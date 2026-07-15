@@ -1,0 +1,117 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Financial Extracts</p>
+    <h1>Account Statements & Reports</h1>
+    <p class="page-subtitle">Generate official bank statements, filter historical transactions, and export audit-ready files.</p>
+  </div>
+  <div class="head-actions">
+    <button type="button" class="secondary-btn" (click)="downloadStatement('EXCEL')">
+      <i class="bi bi-file-earmark-spreadsheet text-success"></i> Export Excel (.xlsx)
+    </button>
+    <button type="button" class="primary-btn" (click)="downloadStatement('PDF')">
+      <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF Statement
+    </button>
+  </div>
+</section>
+
+<!-- Filter Control Bar -->
+<section class="bank-card filter-bar" appCardElevation>
+  <div class="filter-group">
+    <label for="accSelect">Select Account</label>
+    <select id="accSelect" [(ngModel)]="selectedAccountId" class="filter-select">
+      <option value="all">All Accounts Summary</option>
+      @for (acc of bank.accountsList(); track acc.id) {
+        <option [value]="acc.id">{{ acc.name }} ({{ acc.number }})</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="dateSelect">Statement Period</label>
+    <select id="dateSelect" [(ngModel)]="dateRange" class="filter-select">
+      <option value="30days">Last 30 Days (Recent)</option>
+      <option value="90days">Quarterly (Last 3 Months)</option>
+      <option value="6months">Half-Yearly (6 Months)</option>
+      <option value="fy">Financial Year 2025-2026</option>
+    </select>
+  </div>
+
+  <div class="filter-group search-group">
+    <label for="searchQuery">Search Transactions</label>
+    <div class="search-input-wrap">
+      <i class="bi bi-search"></i>
+      <input id="searchQuery" type="text" [(ngModel)]="searchQuery" placeholder="Filter by merchant or category..." class="filter-input" />
+    </div>
+  </div>
+</section>
+
+<!-- Statements Table -->
+<section class="bank-card statement-table-card" appCardElevation>
+  <div class="card-heading">
+    <div>
+      <h2>Statement Extract Overview</h2>
+      <p>Showing {{ filteredTransactions().length }} transactions matching selected criteria</p>
+    </div>
+    <span class="badge bg-primary">RBI Certified Digital Format</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="statement-table">
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Reference ID</th>
+          <th>Merchant / Payee</th>
+          <th>Category</th>
+          <th>Account Vault</th>
+          <th>Type</th>
+          <th class="text-end">Amount (INR)</th>
+          <th class="text-center">Receipt</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (txn of filteredTransactions(); track txn.id) {
+          <tr>
+            <td>
+              <strong>{{ txn.date | date:'dd MMM yyyy' }}</strong>
+              <small>{{ txn.date | date:'hh:mm a' }}</small>
+            </td>
+            <td><code class="txn-id">{{ txn.id }}</code></td>
+            <td>
+              <div class="merchant-cell">
+                <span class="merchant-icon" [class.credit]="txn.type === 'credit'"><i class="bi" [ngClass]="txn.icon"></i></span>
+                <div>
+                  <strong>{{ txn.merchant }}</strong>
+                  <small>{{ txn.senderOrRecipient || 'Verified transfer' }}</small>
+                </div>
+              </div>
+            </td>
+            <td><span class="category-badge">{{ txn.category }}</span></td>
+            <td><span class="vault-name"><i class="bi bi-wallet2"></i> {{ txn.accountId || 'primary' }}</span></td>
+            <td>
+              <span class="type-pill" [class.credit]="txn.type === 'credit'">
+                <i class="bi" [ngClass]="txn.type === 'credit' ? 'bi-arrow-down-left' : 'bi-arrow-up-right'"></i>
+                {{ txn.type | uppercase }}
+              </span>
+            </td>
+            <td class="text-end font-mono" [class.credit-text]="txn.type === 'credit'">
+              <strong>{{ txn.type === 'credit' ? '+' : '-' }}{{ txn.amount | inr }}</strong>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn-receipt" (click)="downloadStatement('PDF')" title="Download Receipt">
+                <i class="bi bi-file-earmark-arrow-down"></i>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" class="text-center empty-cell">
+              <i class="bi bi-folder2-open empty-icon"></i>
+              <p>No transactions found for the selected period and account filter.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

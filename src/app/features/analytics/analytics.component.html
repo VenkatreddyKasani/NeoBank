@@ -1,0 +1,149 @@
+<section class="page-head">
+  <p class="eyebrow">Spending insights</p>
+  <h1>Analytics</h1>
+  <p class="page-subtitle">Understand where your money goes and plan smarter budgets.</p>
+</section>
+
+<section class="stats-grid">
+  <app-stat-card
+    label="Total spent"
+    [value]="formatInr(totalSpent())"
+    trend="↑ 6.4%"
+    trendLabel="vs. last month"
+    icon="bi-arrow-up-right"
+    iconColor="orange"
+    (cardClicked)="onStatClicked('Total spent')" />
+  <app-stat-card
+    label="Daily average"
+    [value]="formatInr(avgDaily())"
+    trend="+2.1%"
+    trendLabel="this week"
+    icon="bi-calendar3"
+    iconColor="blue"
+    (cardClicked)="onStatClicked('Daily average')" />
+  <app-stat-card
+    label="Top category"
+    [value]="topCategory()"
+    trend="28% of spend"
+    icon="bi-pie-chart"
+    iconColor="violet"
+    (cardClicked)="onStatClicked('Top category')" />
+  <app-stat-card
+    label="Transactions"
+    [value]="transactionCount().toString()"
+    trend="↑ 3"
+    trendLabel="from last month"
+    icon="bi-receipt"
+    iconColor="green"
+    (cardClicked)="onStatClicked('Transactions')" />
+</section>
+
+<section class="charts-grid">
+  <article class="bank-card doughnut-card">
+    <div class="card-heading">
+      <div>
+        <h2>Spending by category</h2>
+        <p>Where your money went this month</p>
+      </div>
+      <button type="button" class="select-button">This month <i class="bi bi-chevron-down"></i></button>
+    </div>
+    <div class="doughnut-layout">
+      <div class="doughnut-wrap">
+        <canvas #doughnutChart aria-label="Spending by category doughnut chart"></canvas>
+        <div class="doughnut-center">
+          <span>Total</span>
+          <strong>{{ totalSpent() | inr }}</strong>
+        </div>
+      </div>
+      <div class="category-legend">
+        @for (cat of spendingCategories; track cat.name) {
+          <div class="legend-row">
+            <span class="legend-dot" [style.background]="cat.color"></span>
+            <span class="legend-name">{{ cat.name }}</span>
+            <strong>{{ cat.amount | inr }}</strong>
+            <span class="legend-pct">{{ cat.percentage }}%</span>
+          </div>
+        }
+      </div>
+    </div>
+  </article>
+
+  <article class="bank-card trend-card">
+    <div class="card-heading">
+      <div>
+        <h2>Weekly trend</h2>
+        <p>Daily spending over the past 7 days</p>
+      </div>
+    </div>
+    <div class="trend-wrap">
+      <canvas #trendChart aria-label="Weekly spending trend line chart"></canvas>
+    </div>
+  </article>
+</section>
+
+<section class="breakdown-grid">
+  <article class="bank-card breakdown-card">
+    <div class="card-heading">
+      <div>
+        <h2>Category breakdown</h2>
+        <p>Detailed view of spending across categories</p>
+      </div>
+    </div>
+    <div class="breakdown-list">
+      @for (cat of spendingCategories; track cat.name) {
+        <div class="breakdown-row">
+          <span class="breakdown-icon" [style.background]="cat.color + '20'" [style.color]="cat.color">
+            <i class="bi" [class]="cat.icon"></i>
+          </span>
+          <div class="breakdown-info">
+            <div class="breakdown-top">
+              <strong>{{ cat.name }}</strong>
+              <strong>{{ cat.amount | inr }}</strong>
+            </div>
+            <div class="breakdown-bar">
+              <span [style.width.%]="cat.percentage" [style.background]="cat.color"></span>
+            </div>
+          </div>
+          <span class="breakdown-pct">{{ cat.percentage }}%</span>
+        </div>
+      }
+    </div>
+  </article>
+
+  <article class="bank-card budget-card">
+    <div class="card-heading">
+      <div>
+        <h2>Budget tracker</h2>
+        <p>How you are doing against monthly limits</p>
+      </div>
+    </div>
+    <div class="budget-list">
+      @for (budget of budgets; track budget.name) {
+        <div class="budget-item">
+          <div class="budget-header">
+            <span class="budget-icon" [class]="budget.color">
+              <i class="bi" [class]="budget.icon"></i>
+            </span>
+            <div>
+              <strong>{{ budget.name }}</strong>
+              <small>{{ formatInr(budget.spent) }} of {{ formatInr(budget.limit) }}</small>
+            </div>
+            <span class="budget-pct" [class.danger]="budgetPercent(budget.spent, budget.limit) > 90">
+              {{ budgetPercent(budget.spent, budget.limit) }}%
+            </span>
+          </div>
+          <div class="budget-bar">
+            <span
+              [style.width.%]="budgetPercent(budget.spent, budget.limit)"
+              [class.danger]="budgetPercent(budget.spent, budget.limit) > 90">
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="budget-tip">
+      <i class="bi bi-lightbulb"></i>
+      <span>You are on track with 2 out of 3 budgets this month. Keep it up!</span>
+    </div>
+  </article>
+</section>

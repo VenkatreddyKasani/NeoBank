@@ -1,0 +1,118 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Regulatory Compliance</p>
+    <h1>KYC Verification Queue</h1>
+    <p class="page-subtitle">Inspect submitted Aadhaar biometrics and PAN documents to approve or request re-verification.</p>
+  </div>
+</section>
+
+<!-- Pending Applications Queue -->
+<section class="bank-card table-panel mb-4" appCardElevation>
+  <div class="card-heading">
+    <div>
+      <h2>Pending KYC Verification Queue</h2>
+      <p>Requiring administrator review and RBI AML clearance ({{ pendingKycUsers().length }} applications)</p>
+    </div>
+    <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-circle-fill"></i> Action Required</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Customer Name</th>
+          <th>Contact & ID</th>
+          <th>Aadhaar Number</th>
+          <th>PAN Number</th>
+          <th>Submission Date</th>
+          <th class="text-end">Verification Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of pendingKycUsers(); track u.id) {
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="avatar warning">{{ u.fullName.slice(0, 2).toUpperCase() }}</div>
+                <div>
+                  <strong>{{ u.fullName }}</strong>
+                  <small>{{ u.id }}</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <strong>{{ u.email }}</strong>
+              <small>{{ u.phone }}</small>
+            </td>
+            <td><code class="doc-badge">{{ u.aadhaar || '4444 •••• 6666' }}</code></td>
+            <td><code class="doc-badge">{{ u.pan || 'ABCDE1234F' }}</code></td>
+            <td><strong>{{ u.createdAt | date:'dd MMM yyyy' }}</strong></td>
+            <td class="text-end">
+              <div class="action-btn-group">
+                <button type="button" class="btn-approve" (click)="approveKyc(u)">
+                  <i class="bi bi-check-circle-fill"></i> Approve KYC
+                </button>
+                <button type="button" class="btn-reject" (click)="rejectKyc(u)">
+                  <i class="bi bi-x-circle-fill"></i> Reject
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="text-center empty-cell">
+              <i class="bi bi-patch-check-fill text-success empty-icon"></i>
+              <p>All pending KYC applications have been reviewed and verified successfully.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Verified Applications Registry -->
+<section class="bank-card table-panel" appCardElevation>
+  <div class="card-heading">
+    <div>
+      <h2>Verified KYC Customer Registry</h2>
+      <p>Tier-1 active customers with verified Aadhaar and PAN records ({{ verifiedKycUsers().length }} customers)</p>
+    </div>
+    <span class="badge bg-success"><i class="bi bi-shield-check"></i> Compliant</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Customer Info</th>
+          <th>Verified Aadhaar</th>
+          <th>Verified PAN</th>
+          <th>Status</th>
+          <th>Verified On</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of verifiedKycUsers(); track u.id) {
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="avatar success">{{ u.fullName.slice(0, 2).toUpperCase() }}</div>
+                <div>
+                  <strong>{{ u.fullName }}</strong>
+                  <small>{{ u.email }}</small>
+                </div>
+              </div>
+            </td>
+            <td><code>{{ u.aadhaar || '4444 •••• 6666' }}</code></td>
+            <td><code>{{ u.pan || 'ABCDE1234F' }}</code></td>
+            <td>
+              <span class="status-pill success"><i class="bi bi-patch-check-fill"></i> Verified Tier-1</span>
+            </td>
+            <td>{{ u.createdAt | date:'dd MMM yyyy' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

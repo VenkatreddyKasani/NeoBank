@@ -1,0 +1,53 @@
+.login-page { background: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px 20px; }
+.login-panel { margin: auto; max-width: 460px; padding: 40px 32px; width: 100%; background: #ffffff; border-radius: 20px; box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08); border: 1px solid var(--line); }
+.brand-logo { color: #0f172a !important; margin-bottom: 24px; }
+.brand-text { color: #0f172a !important; }
+.brand-text span { color: #2563eb !important; }
+.login-copy { margin: 40px 0 24px; }
+.eyebrow { color: #2563eb; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.login-copy h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; margin: 4px 0 8px; color: #0f172a; }
+.login-copy > p:last-child { color: #64748b; font-size: 13px; margin: 0; line-height: 1.5; }
+
+.login-panel form label { color: #334155; display: block; font-size: 12px; font-weight: 600; margin: 16px 0 6px; }
+.login-panel input:not([type='checkbox']), .role-dropdown { border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; height: 44px; outline: 0; padding: 0 12px; width: 100%; background: #fff; color: #0f172a; transition: border-color 0.2s, box-shadow 0.2s; }
+.login-panel input:focus, .role-dropdown:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+
+/* Role Selector */
+.role-selector { position: relative; }
+.role-dropdown { appearance: none; -webkit-appearance: none; padding-right: 36px; font-weight: 600; cursor: pointer; }
+.select-arrow { position: absolute; right: 12px; top: 14px; color: #64748b; pointer-events: none; font-size: 14px; }
+.role-hint { background: #eff6ff; border: 1px solid #dbeafe; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 11.5px; color: #1e40af; display: flex; align-items: center; gap: 8px; }
+.role-hint i { font-size: 14px; }
+
+.password-input { position: relative; }
+.password-input input { padding-right: 40px !important; }
+.password-input button { background: transparent; border: 0; color: #64748b; position: absolute; right: 8px; top: 12px; }
+
+.login-error-banner { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px; padding: 10px 12px; margin-top: 14px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.login-error-banner i { font-size: 15px; }
+
+.login-options { align-items: center; display: flex; justify-content: space-between; margin-top: 16px; }
+.login-options label { color: #64748b !important; font-size: 12px !important; font-weight: 400 !important; margin: 0 !important; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.login-options input { margin: 0; width: 15px; height: 15px; cursor: pointer; }
+.login-options a, .register a { color: #2563eb; font-size: 12px; font-weight: 600; text-decoration: none; }
+.login-options a:hover, .register a:hover { text-decoration: underline; }
+
+.login-submit { background: #2563eb; border: 0; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; height: 44px; margin-top: 22px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s, transform 0.1s; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+.login-submit:hover:not([disabled]) { background: #1d4ed8; }
+.login-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.register { color: #64748b; font-size: 12px; margin-top: 26px; text-align: center; }
+
+.login-aside { background: linear-gradient(145deg, #0f172a, #1e3a8a); color: #fff; display: flex; flex-direction: column; justify-content: space-between; padding: 70px; }
+.aside-mark { align-items: center; background: rgba(147, 197, 253, 0.16); border: 1px solid rgba(147, 197, 253, 0.2); border-radius: 12px; color: #93c5fd; display: grid; font-size: 22px; height: 46px; place-items: center; width: 46px; }
+.login-aside h2 { font-size: 38px; font-weight: 800; letter-spacing: -1.4px; line-height: 1.15; margin: 24px 0 16px; }
+.login-aside p { color: #bfdbfe; font-size: 14px; line-height: 1.6; max-width: 380px; margin: 0; }
+.aside-stats-row { border-top: 1px solid rgba(255, 255, 255, 0.14); padding-top: 24px; display: flex; gap: 40px; }
+.aside-stat strong { display: block; font-size: 24px; font-weight: 800; color: #fff; }
+.aside-stat span { color: #bfdbfe; font-size: 12px; margin-top: 4px; display: block; }
+
+@media (max-width: 900px) {
+  .login-page { grid-template-columns: 1fr; }
+  .login-aside { display: none; }
+  .login-panel { max-width: 480px; }
+}

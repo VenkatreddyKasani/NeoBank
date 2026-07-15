@@ -1,0 +1,211 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Credit & Amortization</p>
+    <h1>Active Loans & Credit Facilities</h1>
+    <p class="page-subtitle">Manage pre-approved credit lines, pay monthly EMIs, and simulate borrowing scenarios.</p>
+  </div>
+  <div class="head-actions">
+    <button type="button" class="primary-btn" (click)="openLoanModal()">
+      <i class="bi bi-plus-circle-fill"></i> Apply for New Loan / Credit Line
+    </button>
+  </div>
+</section>
+
+<!-- Credit Overview Metrics -->
+<section class="metrics-grid mb-4">
+  <div class="stat-card bank-card" appCardElevation>
+    <div class="stat-top">
+      <span>Sanctioned Credit Limit</span>
+      <span class="stat-icon blue"><i class="bi bi-cash-stack"></i></span>
+    </div>
+    <strong>{{ totalSanctioned() | inr }}</strong>
+    <p class="stat-meta text-success"><i class="bi bi-check-circle"></i> Pre-approved limits verified</p>
+  </div>
+
+  <div class="stat-card bank-card" appCardElevation>
+    <div class="stat-top">
+      <span>Total Outstanding Balance</span>
+      <span class="stat-icon orange"><i class="bi bi-wallet2"></i></span>
+    </div>
+    <strong>{{ totalOutstanding() | inr }}</strong>
+    <p class="stat-meta text-muted">Across all active accounts</p>
+  </div>
+
+  <div class="stat-card bank-card" appCardElevation>
+    <div class="stat-top">
+      <span>Monthly Total EMI</span>
+      <span class="stat-icon violet"><i class="bi bi-calendar-check"></i></span>
+    </div>
+    <strong>{{ monthlyEmiTotal() | inr }} <small class="text-muted">/ mo</small></strong>
+    <p class="stat-meta text-primary"><i class="bi bi-shield-check"></i> Auto-debit active on Primary</p>
+  </div>
+
+  <div class="stat-card bank-card credit-score-card" appCardElevation>
+    <div class="stat-top">
+      <span>NeoBank Credit Score</span>
+      <span class="stat-icon green"><i class="bi bi-patch-check-fill"></i></span>
+    </div>
+    <div class="score-display">
+      <strong class="text-success">812</strong>
+      <span class="score-badge">EXCELLENT</span>
+    </div>
+    <p class="stat-meta text-muted">Bureau verified (Experian / CIBIL)</p>
+  </div>
+</section>
+
+<!-- Filter Tabs -->
+<section class="filter-bar mb-4">
+  <div class="filter-tabs">
+    <button type="button" [class.active]="filterTab() === 'ALL'" (click)="setTab('ALL')">
+      All Facilities ({{ bank.userLoans().length }})
+    </button>
+    <button type="button" [class.active]="filterTab() === 'Active'" (click)="setTab('Active')">
+      Active
+    </button>
+    <button type="button" [class.active]="filterTab() === 'Pending'" (click)="setTab('Pending')">
+      Pending Verification
+    </button>
+    <button type="button" [class.active]="filterTab() === 'Closed'" (click)="setTab('Closed')">
+      Closed / Repaid
+    </button>
+  </div>
+</section>
+
+<!-- Loans List Section -->
+<section class="loans-content">
+  @if (filteredLoans().length > 0) {
+    <div class="loans-grid">
+      @for (loan of filteredLoans(); track loan.id) {
+        <article class="loan-card-item bank-card" [ngClass]="loan.status === 'Active' ? 'status-active' : loan.status === 'Pending' ? 'status-pending' : 'status-closed'" appCardElevation>
+          <div class="loan-item-top">
+            <div class="loan-title-group">
+              <span class="loan-icon-chip"><i class="bi bi-cash-coin"></i></span>
+              <div>
+                <h3>{{ loan.type }}</h3>
+                <small class="loan-id">{{ loan.id }} · Applied on {{ loan.appliedDate | date:'dd MMM yyyy' }}</small>
+              </div>
+            </div>
+            <span class="status-pill" [ngClass]="loan.status === 'Active' ? 'success' : loan.status === 'Closed' ? 'info' : 'warning'">
+              <i class="bi" [ngClass]="loan.status === 'Active' ? 'bi-check-circle-fill' : loan.status === 'Closed' ? 'bi-archive-fill' : 'bi-clock-fill'"></i>
+              {{ loan.status }}
+            </span>
+          </div>
+
+          <div class="loan-metrics-row">
+            <div class="loan-metric">
+              <span>Total Disbursed</span>
+              <strong>{{ loan.amount | inr }}</strong>
+            </div>
+            <div class="loan-metric">
+              <span>Outstanding Balance</span>
+              <strong class="text-primary">{{ (loan.remainingAmount !== undefined ? loan.remainingAmount : loan.amount) | inr }}</strong>
+            </div>
+            <div class="loan-metric">
+              <span>Monthly EMI</span>
+              <strong>{{ loan.emi | inr }} <small class="text-muted">/mo</small></strong>
+            </div>
+            <div class="loan-metric">
+              <span>Interest & Tenure</span>
+              <strong>{{ loan.interestRate || 10.5 }}% p.a. · {{ loan.tenure }}</strong>
+            </div>
+          </div>
+
+          @if (loan.status !== 'Closed') {
+            <div class="loan-progress-box">
+              <div class="progress-bar-wrap">
+                <div class="progress-fill" [style.width.%]="((loan.amount - (loan.remainingAmount !== undefined ? loan.remainingAmount : loan.amount)) / loan.amount) * 100"></div>
+              </div>
+              <div class="progress-labels">
+                <span>{{ (((loan.amount - (loan.remainingAmount !== undefined ? loan.remainingAmount : loan.amount)) / loan.amount) * 100) | number:'1.0-0' }}% repaid</span>
+                <span>Next due: {{ loan.nextDueDate || '05 Aug 2026' }}</span>
+              </div>
+            </div>
+          }
+
+          <div class="loan-item-actions">
+            @if (loan.status === 'Active') {
+              <button type="button" class="btn-pay-emi" (click)="payEmi(loan.id)">
+                <i class="bi bi-check2-circle"></i> Pay EMI ({{ loan.emi | inr }})
+              </button>
+              <span class="auto-debit-note"><i class="bi bi-shield-lock"></i> Auto-debit protected</span>
+            } @else if (loan.status === 'Pending') {
+              <span class="pending-review-note"><i class="bi bi-hourglass-split"></i> Application is currently being verified by credit risk team</span>
+            } @else {
+              <span class="closed-note text-success"><i class="bi bi-check2-all"></i> Loan successfully fully repaid and closed</span>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="loans-empty-banner bank-card">
+      <div class="empty-icon-wrap"><i class="bi bi-bank"></i></div>
+      <div>
+        <h3>No Loans Found for This Filter</h3>
+        <p>You have no loan records matching the selected tab. Apply for a pre-approved facility with zero processing fee.</p>
+      </div>
+      <button type="button" class="primary-btn" (click)="openLoanModal()">Claim Credit Limit</button>
+    </div>
+  }
+</section>
+
+<!-- Interactive Modal: Apply for Loan / Credit Line -->
+@if (showLoanModal()) {
+  <div class="modal-backdrop-custom" (click)="closeLoanModal()">
+    <div class="modal-card-custom bank-card loan-modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2><i class="bi bi-cash-coin text-primary"></i> Apply for Instant Loan Facility</h2>
+        <button type="button" class="modal-close-btn" (click)="closeLoanModal()"><i class="bi bi-x"></i></button>
+      </div>
+      <form (ngSubmit)="submitLoanApplication()" class="modal-body">
+        <div class="form-group mb-3">
+          <label>Select Loan / Credit Line Facility</label>
+          <select [(ngModel)]="newLoanType" name="lType" class="form-input-custom">
+            <option value="Personal Instant Credit Line">Personal Instant Credit Line (10.5% p.a. - Zero paperwork)</option>
+            <option value="Home Improvement Vault Loan">Home Improvement Vault Loan (8.4% p.a. - Special rate)</option>
+            <option value="Auto & Electric Vehicle Advance">Auto & Electric Vehicle Advance (9.2% p.a. - Green rebate)</option>
+            <option value="Education & Skill Advance">Education & Skill Advance (8.8% p.a. - Student friendly)</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-3">
+          <label>Required Loan Amount (₹)</label>
+          <input type="number" [(ngModel)]="newLoanAmount" name="lAmount" required min="10000" step="10000" class="form-input-custom" />
+          <div class="amount-chips mt-2">
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 100000">₹1 Lakh</button>
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 250000">₹2.5 Lakh</button>
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 500000">₹5 Lakh</button>
+            <button type="button" class="chip-btn" (click)="newLoanAmount = 1000000">₹10 Lakh</button>
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label>Repayment Tenure</label>
+          <select [(ngModel)]="newLoanTenure" name="lTenure" class="form-input-custom">
+            <option value="12 Months">12 Months (1 Year)</option>
+            <option value="24 Months">24 Months (2 Years)</option>
+            <option value="36 Months">36 Months (3 Years)</option>
+            <option value="60 Months">60 Months (5 Years)</option>
+            <option value="120 Months">120 Months (10 Years)</option>
+          </select>
+        </div>
+
+        <div class="emi-simulator-panel mb-4">
+          <div class="emi-sim-top">
+            <span>Estimated Monthly EMI</span>
+            <strong>{{ calculatedEmi() | inr }} / mo</strong>
+          </div>
+          <div class="emi-sim-details">
+            <span><i class="bi bi-check2"></i> Zero Processing Fee</span>
+            <span><i class="bi bi-lightning-charge-fill text-warning"></i> Instant 3-Minute Disbursal to Neo Primary</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" (click)="closeLoanModal()">Cancel</button>
+          <button type="submit" class="primary-btn"><i class="bi bi-shield-check"></i> Disburse {{ newLoanAmount | inr }} Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

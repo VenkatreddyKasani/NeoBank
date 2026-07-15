@@ -1,0 +1,54 @@
+<section class="page-head notifications-head">
+  <div>
+    <p class="eyebrow">Stay updated</p>
+    <h1>Notifications @if (notificationService.unreadCount() > 0) { <span class="unread-badge">{{ notificationService.unreadCount() }}</span> }</h1>
+    <p class="page-subtitle">All your alerts, updates and payment activity in one place.</p>
+  </div>
+  @if (notificationService.unreadCount() > 0) {
+    <button class="secondary-btn" type="button" (click)="markAllRead()">
+      <i class="bi bi-check2-all"></i> Mark all as read
+    </button>
+  }
+</section>
+
+<section class="filter-tabs">
+  @for (tab of tabs; track tab.key) {
+    <button
+      type="button"
+      [class.active]="activeTab() === tab.key"
+      (click)="setTab(tab.key)">
+      <i class="bi" [ngClass]="tab.icon"></i> {{ tab.label }}
+    </button>
+  }
+</section>
+
+<section class="notifications-list">
+  @for (notification of filtered(); track notification.id) {
+    <article class="notification-item" [class.unread]="!notification.read" (click)="markRead(notification.id)">
+      <span class="notification-icon" [class]="categoryColor(notification.category)">
+        <i class="bi" [ngClass]="notification.icon"></i>
+      </span>
+      <div class="notification-body">
+        <div class="notification-top">
+          <strong>{{ notification.title }}</strong>
+          <span class="notification-time">{{ notification.timestamp | relativeTime }}</span>
+        </div>
+        <p>{{ notification.message }}</p>
+        <span class="notification-tag" [class]="categoryColor(notification.category)">{{ categoryLabel(notification.category) }}</span>
+      </div>
+      <div class="notification-actions">
+        @if (!notification.read) {
+          <span class="unread-dot" title="Unread"></span>
+        }
+        <button type="button" class="dismiss-btn" (click)="dismiss(notification.id); $event.stopPropagation()" aria-label="Dismiss notification">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+    </article>
+  } @empty {
+    <div class="empty-state">
+      <i class="bi bi-bell-slash"></i>
+      No notifications in this category.
+    </div>
+  }
+</section>

@@ -1,0 +1,146 @@
+<main class="register-page">
+  <section class="register-panel">
+    <a class="brand-logo mb-4" routerLink="/welcome">
+      <span class="brand-mark"><i class="bi bi-lightning-charge-fill"></i></span>
+      <span class="brand-text">neo<span>bank</span></span>
+    </a>
+
+    @if (registrationSuccess()) {
+      <div class="success-box glass-card">
+        <div class="success-icon"><i class="bi bi-check-circle-fill"></i></div>
+        <h1>Registration Successful</h1>
+        <p class="success-subtitle">Please login to continue.</p>
+        <div class="success-details">
+          <span><strong>Account Type:</strong> User (Customer Suite)</span>
+          <span><strong>Username:</strong> {{ username }}</span>
+          <span><strong>Status:</strong> Active & Verified</span>
+        </div>
+        <button type="button" class="btn-primary-action" (click)="goToLogin()">
+          <i class="bi bi-box-arrow-in-right"></i> Proceed to Login
+        </button>
+      </div>
+    } @else {
+      <div class="register-header">
+        <span class="eyebrow"><i class="bi bi-person-badge-fill"></i> Customer Onboarding</span>
+        <h1>Create your User Account</h1>
+        <p>Open your digital banking account online. Note: System Administrators are provisioned internally.</p>
+      </div>
+
+      <form #regForm="ngForm" (ngSubmit)="submitRegistration()" class="register-form">
+        <!-- Personal Details Section -->
+        <div class="form-section">
+          <h3>1. Personal & KYC Credentials</h3>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="fullName">Full Name (as per Aadhaar / PAN) *</label>
+              <input id="fullName" name="fullName" type="text" [(ngModel)]="fullName" required placeholder="e.g. Venkat Raman" />
+            </div>
+
+            <div class="form-group">
+              <label for="aadhaar">Aadhaar Number (12 digits) *</label>
+              <input id="aadhaar" name="aadhaar" type="text" [(ngModel)]="aadhaar" required maxlength="14" placeholder="4444 5555 6666" />
+            </div>
+
+            <div class="form-group">
+              <label for="pan">PAN Number (e.g. ABCDE1234F) *</label>
+              <input id="pan" name="pan" type="text" [(ngModel)]="pan" required maxlength="10" placeholder="ABCDE1234F" style="text-transform: uppercase;" />
+            </div>
+
+            <div class="form-group">
+              <label for="dob">Date of Birth *</label>
+              <input id="dob" name="dob" type="date" [(ngModel)]="dob" required />
+            </div>
+
+            <div class="form-group">
+              <label for="gender">Gender *</label>
+              <select id="gender" name="gender" [(ngModel)]="gender" class="custom-select">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact & Address Section -->
+        <div class="form-section">
+          <h3>2. Contact & Residential Address</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="email">Email Address (Unique ID) *</label>
+              <input id="email" name="email" type="email" [(ngModel)]="email" required placeholder="you@example.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input id="phone" name="phone" type="tel" [(ngModel)]="phone" required placeholder="+91 98111 22333" />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="street">Street & Building Address *</label>
+              <input id="street" name="street" type="text" [(ngModel)]="address.street" required placeholder="101, Residency Towers" />
+            </div>
+
+            <div class="form-group">
+              <label for="city">City *</label>
+              <input id="city" name="city" type="text" [(ngModel)]="address.city" required placeholder="Bengaluru" />
+            </div>
+
+            <div class="form-group">
+              <label for="state">State *</label>
+              <input id="state" name="state" type="text" [(ngModel)]="address.state" required placeholder="Karnataka" />
+            </div>
+
+            <div class="form-group">
+              <label for="pincode">PIN Code *</label>
+              <input id="pincode" name="pincode" type="text" [(ngModel)]="address.pincode" required placeholder="560102" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Security & Account Setup Section -->
+        <div class="form-section">
+          <h3>3. Portal Account Security</h3>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="username">Choose Username *</label>
+              <input id="username" name="username" type="text" [(ngModel)]="username" required placeholder="venkatraman" />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password (min 8 characters) *</label>
+              <input id="password" name="password" type="password" [(ngModel)]="password" required minlength="8" placeholder="Create strong password" />
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password *</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" [(ngModel)]="confirmPassword" required placeholder="Re-enter password" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Alert -->
+        @if (errorMessage()) {
+          <div class="error-banner">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <div class="form-actions">
+          <button type="submit" class="register-submit-btn" [disabled]="isSubmitting()">
+            @if (isSubmitting()) {
+              <span class="spinner-border spinner-border-sm me-2"></span> Submitting Application...
+            } @else {
+              <span><i class="bi bi-check-circle"></i> Create Bank Account & Register</span>
+            }
+          </button>
+        </div>
+      </form>
+
+      <p class="login-redirect">
+        Already registered with NeoBank? <a routerLink="/login">Sign in here</a>
+      </p>
+    }
+  </section>
+</main>

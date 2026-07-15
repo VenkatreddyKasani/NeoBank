@@ -1,0 +1,112 @@
+<main class="login-page">
+  <section class="login-panel">
+    <a class="brand-logo mb-4" routerLink="/welcome">
+      <span class="brand-mark"><i class="bi bi-lightning-charge-fill"></i></span>
+      <span class="brand-text">neo<span>bank</span></span>
+    </a>
+
+    <div class="login-copy">
+      <p class="eyebrow">Virtual Banking Portal</p>
+      <h1>Sign in to your account</h1>
+      <p>Select your role and enter your credentials to securely access your portal.</p>
+    </div>
+
+    <form #loginForm="ngForm" (ngSubmit)="signIn()">
+      <!-- Role Dropdown -->
+      <label for="roleSelect">Select Role</label>
+      <div class="role-selector">
+        <select id="roleSelect" name="role" [ngModel]="role" (ngModelChange)="onRoleChange($event)" class="role-dropdown">
+          <option value="user">User (Customer Portal)</option>
+          <option value="admin">Admin (System Governance)</option>
+        </select>
+        <i class="bi bi-chevron-down select-arrow"></i>
+      </div>
+
+      <div class="role-hint">
+        @if (role === 'admin') {
+          <span><i class="bi bi-shield-lock-fill text-primary"></i> Logging into System Administrator Console (`admin@neobank.com` / `admin123`)</span>
+        } @else {
+          <span><i class="bi bi-person-check-fill text-primary"></i> Logging into Customer Banking Suite (`venkat@neobank.com` / `password123`)</span>
+        }
+      </div>
+
+      <!-- Email Input -->
+      <label for="email">Email address or Username</label>
+      <input
+        id="email"
+        name="email"
+        type="text"
+        [(ngModel)]="email"
+        required
+        placeholder="you@example.com or username"
+        [disabled]="isLoggingIn()"
+      />
+
+      <!-- Password Input -->
+      <label for="password">Password</label>
+      <div class="password-input">
+        <input
+          id="password"
+          name="password"
+          [type]="showPassword ? 'text' : 'password'"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          placeholder="Enter your password"
+          [disabled]="isLoggingIn()"
+        />
+        <button type="button" (click)="showPassword = !showPassword" aria-label="Toggle password visibility">
+          <i class="bi" [class]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+        </button>
+      </div>
+
+      <!-- Error Message Box -->
+      @if (errorMessage() || (submitted() && loginForm.invalid)) {
+        <div class="login-error-banner">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>{{ errorMessage() || 'Please enter a valid email and your password.' }}</span>
+        </div>
+      }
+
+      <!-- Options -->
+      <div class="login-options">
+        <label>
+          <input type="checkbox" [(ngModel)]="remember" name="remember" [disabled]="isLoggingIn()" /> Remember me
+        </label>
+        <a href="javascript:void(0)" (click)="triggerForgotPassword()">Forgot password?</a>
+      </div>
+
+      <!-- Submit Button -->
+      <button class="login-submit" type="submit" [disabled]="isLoggingIn()">
+        @if (isLoggingIn()) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Authenticating...
+        } @else {
+          <span>Sign in as {{ role === 'admin' ? 'Admin' : 'User' }} <i class="bi bi-arrow-right"></i></span>
+        }
+      </button>
+    </form>
+
+    <p class="register">
+      New to Virtual Banking? <a routerLink="/register">Create a User Account</a>
+    </p>
+  </section>
+
+  <aside class="login-aside">
+    <div>
+      <span class="aside-mark"><i class="bi bi-shield-check"></i></span>
+      <h2>Virtual Banking Portal<br/>Role-Based Security.</h2>
+      <p>Our dual-role architecture ensures strict isolation between Customer banking operations and Administrator system management.</p>
+    </div>
+    <div class="aside-stats-row">
+      <div class="aside-stat">
+        <strong>₹12.8L+</strong>
+        <span>Secured Deposits</span>
+      </div>
+      <div class="aside-stat">
+        <strong>256-Bit</strong>
+        <span>JWT Encrypted Sessions</span>
+      </div>
+    </div>
+  </aside>
+</main>

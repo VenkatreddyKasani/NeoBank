@@ -1,0 +1,362 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Account management</p>
+    <h1>Profile & KYC Preferences</h1>
+    <p class="page-subtitle">Manage your verified customer details, residential address, account nominee, security credentials, and physical cheque books.</p>
+  </div>
+</section>
+
+<section class="profile-layout">
+  <!-- Left Column: Profile Summary & Navigation -->
+  <aside class="profile-sidebar">
+    <div class="bank-card profile-summary-card text-center">
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar">{{ bank.profile().initials }}</div>
+        <span class="kyc-badge-icon" title="Full KYC Verified"><i class="bi bi-patch-check-fill"></i></span>
+      </div>
+      <h2>{{ bank.profile().name }}</h2>
+      <p class="user-email">{{ bank.profile().email }}</p>
+      <span class="customer-id-pill">Customer ID: {{ bank.profile().customerId || 'NEO-894210' }}</span>
+
+      <div class="kyc-tier-box">
+        <div class="tier-top">
+          <span class="status-pill success"><i class="bi bi-shield-check"></i> FULL KYC TIER 1</span>
+          <strong>Active</strong>
+        </div>
+        <p>Aadhaar Biometric & PAN Verified. Unlimited transaction privileges & cheque book dispatch enabled.</p>
+      </div>
+    </div>
+
+    <!-- Section Navigation Menu -->
+    <div class="bank-card profile-nav-menu margin-top-md">
+      <button type="button" [class.active]="activeSection() === 'personal'" (click)="setSection('personal')">
+        <i class="bi bi-person-badge"></i> Personal Credentials
+      </button>
+      <button type="button" [class.active]="activeSection() === 'address'" (click)="setSection('address')">
+        <i class="bi bi-geo-alt"></i> Update Address
+      </button>
+      <button type="button" [class.active]="activeSection() === 'nominee'" (click)="setSection('nominee')">
+        <i class="bi bi-people"></i> Account Nominee
+      </button>
+      <button type="button" [class.active]="activeSection() === 'security'" (click)="setSection('security')">
+        <i class="bi bi-shield-lock"></i> Security & Change Password
+      </button>
+      <button type="button" [class.active]="activeSection() === 'chequebook'" (click)="setSection('chequebook')">
+        <i class="bi bi-journal-check"></i> Request Cheque Book
+      </button>
+    </div>
+  </aside>
+
+  <!-- Right Column: Form Panels -->
+  <main class="profile-main">
+    <!-- SECTION 1: PERSONAL CREDENTIALS -->
+    @if (activeSection() === 'personal') {
+      <article class="bank-card profile-panel fade-in">
+        <div class="card-heading">
+          <div>
+            <h2>Personal Credentials & Contact</h2>
+            <p>Official records linked to your PAN and Aadhaar identity.</p>
+          </div>
+          <span class="status-pill success"><i class="bi bi-lock-fill"></i> Verified</span>
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="app-form-label" for="full-name">Full Legal Name</label>
+              <input class="app-input" id="full-name" formControlName="name" />
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="pan-num">PAN Card Number</label>
+              <input class="app-input" id="pan-num" formControlName="panNumber" style="text-transform: uppercase;" />
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="user-email">Email Address</label>
+              <input class="app-input" id="user-email" formControlName="email" type="email" />
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="user-phone">Registered Mobile</label>
+              <input class="app-input" id="user-phone" formControlName="phone" />
+            </div>
+
+            <div class="form-group full-width">
+              <label class="app-form-label" for="user-occ">Occupation & Industry</label>
+              <input class="app-input" id="user-occ" formControlName="occupation" />
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <p class="form-hint"><i class="bi bi-check-circle-fill text-green"></i> Changes take effect immediately across all vaults.</p>
+            <button class="primary-btn" type="submit">Save Personal Changes</button>
+          </div>
+        </form>
+      </article>
+    }
+
+    <!-- SECTION 2: REGISTERED ADDRESS -->
+    @if (activeSection() === 'address') {
+      <article class="bank-card profile-panel fade-in">
+        <div class="card-heading">
+          <div>
+            <h2>Registered Residential Address</h2>
+            <p>Physical communication address and home branch allocation.</p>
+          </div>
+          <span class="pill-badge">Branch: Bengaluru Tech Park</span>
+        </div>
+
+        <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="app-form-label" for="street">Street Address & Building</label>
+              <input class="app-input" id="street" formControlName="street" />
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="city">City / District</label>
+              <input class="app-input" id="city" formControlName="city" />
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="state">State</label>
+              <input class="app-input" id="state" formControlName="state" />
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="pincode">PIN / Postal Code</label>
+              <input class="app-input" id="pincode" formControlName="pincode" />
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <p class="form-hint"><i class="bi bi-house-door-fill text-blue"></i> Physical debit cards and cheque books will be delivered here.</p>
+            <button class="primary-btn" type="submit">Update Address</button>
+          </div>
+        </form>
+      </article>
+    }
+
+    <!-- SECTION 3: ACCOUNT NOMINEE -->
+    @if (activeSection() === 'nominee') {
+      <article class="bank-card profile-panel fade-in">
+        <div class="card-heading">
+          <div>
+            <h2>Registered Nominee Declaration</h2>
+            <p>Beneficiary allocated 100% rights for all NeoBank savings vaults & investments.</p>
+          </div>
+          <span class="status-pill success">100% Share</span>
+        </div>
+
+        <form [formGroup]="nomineeForm" (ngSubmit)="saveNominee()">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="app-form-label" for="nom-name">Nominee Full Name</label>
+              <input class="app-input" id="nom-name" formControlName="name" />
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="nom-rel">Relationship with Account Holder</label>
+              <select class="app-select" id="nom-rel" formControlName="relationship">
+                <option>Spouse</option>
+                <option>Father</option>
+                <option>Mother</option>
+                <option>Son</option>
+                <option>Daughter</option>
+                <option>Sibling</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="app-form-label" for="nom-dob">Date of Birth</label>
+              <input class="app-input" id="nom-dob" type="date" formControlName="dob" />
+            </div>
+          </div>
+
+          <div class="nominee-info-box margin-top-md">
+            <i class="bi bi-shield-check text-blue"></i>
+            <div>
+              <strong>Legal Protection Assured</strong>
+              <span>According to RBI regulations, declaring a nominee ensures seamless settlement of claims in unfortunate scenarios.</span>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <p class="form-hint"><i class="bi bi-info-circle"></i> Nominee details can be updated anytime online.</p>
+            <button class="primary-btn" type="submit">Save Nominee Declaration</button>
+          </div>
+        </form>
+      </article>
+    }
+
+    <!-- SECTION 4: SECURITY & CHANGE PASSWORD -->
+    @if (activeSection() === 'security') {
+      <div class="security-stack fade-in">
+        <!-- Change Password Card -->
+        <article class="bank-card profile-panel mb-4">
+          <div class="card-heading">
+            <div>
+              <h2>Change Account Password</h2>
+              <p>Ensure your account is protected using a strong, unique password.</p>
+            </div>
+            <span class="badge bg-warning text-dark"><i class="bi bi-key-fill"></i> Password Security</span>
+          </div>
+
+          <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label class="app-form-label" for="curr-pass">Current Password</label>
+                <input class="app-input" id="curr-pass" type="password" formControlName="currentPassword" placeholder="Enter current password" />
+              </div>
+
+              <div class="form-group">
+                <label class="app-form-label" for="new-pass">New Password (min 8 characters)</label>
+                <input class="app-input" id="new-pass" type="password" formControlName="newPassword" placeholder="Create strong new password" />
+              </div>
+
+              <div class="form-group">
+                <label class="app-form-label" for="conf-pass">Confirm New Password</label>
+                <input class="app-input" id="conf-pass" type="password" formControlName="confirmNewPassword" placeholder="Re-enter new password" />
+              </div>
+            </div>
+
+            <div class="panel-footer">
+              <p class="form-hint"><i class="bi bi-shield-lock-fill text-primary"></i> You will stay logged in on your current device after change.</p>
+              <button class="primary-btn" type="submit" [disabled]="passwordForm.invalid">Update Password</button>
+            </div>
+          </form>
+        </article>
+
+        <!-- Biometrics & 2FA Card -->
+        <article class="bank-card profile-panel">
+          <div class="card-heading">
+            <div>
+              <h2>Authentication Preferences</h2>
+              <p>Configure two-factor authentication, MPIN, and biometric login.</p>
+            </div>
+          </div>
+
+          <div class="security-list">
+            <div class="sec-item">
+              <div class="sec-left">
+                <span class="sec-icon"><i class="bi bi-fingerprint"></i></span>
+                <div>
+                  <strong>Biometric / FaceID Login</strong>
+                  <span>Enable biometric touch or facial recognition on mobile device</span>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="sec-item">
+              <div class="sec-left">
+                <span class="sec-icon"><i class="bi bi-phone-vibrate"></i></span>
+                <div>
+                  <strong>Two-Factor Authentication (2FA)</strong>
+                  <span>Require SMS OTP verification for transfers exceeding ₹25,000</span>
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="sec-item">
+              <div class="sec-left">
+                <span class="sec-icon"><i class="bi bi-key"></i></span>
+                <div>
+                  <strong>Banking MPIN Passcode</strong>
+                  <span>Last updated 45 days ago</span>
+                </div>
+              </div>
+              <button type="button" class="secondary-btn" (click)="bank.addMoney(0, 'MPIN reset link sent via SMS')">
+                Reset MPIN
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    }
+
+    <!-- SECTION 5: REQUEST CHEQUE BOOK -->
+    @if (activeSection() === 'chequebook') {
+      <article class="bank-card profile-panel fade-in">
+        <div class="card-heading">
+          <div>
+            <h2>Request Personalized Cheque Book</h2>
+            <p>Order physical cheque leaves delivered to your registered residential address.</p>
+          </div>
+          <span class="badge bg-success"><i class="bi bi-truck"></i> Free Courier Dispatch</span>
+        </div>
+
+        <div class="cheque-showcase">
+          <div class="cheque-mockup">
+            <div class="cheque-top">
+              <span><i class="bi bi-lightning-charge-fill"></i> neobank</span>
+              <small>PAYABLE AT PAR AT ALL BRANCHES IN INDIA</small>
+            </div>
+            <div class="cheque-mid">
+              <span>Pay __________________________________________________ or Bearer</span>
+              <div class="amount-box">₹</div>
+            </div>
+            <div class="cheque-bot">
+              <div>
+                <small>ACCOUNT NUMBER</small>
+                <strong>•••• •••• •••• 4821</strong>
+              </div>
+              <div class="holder-sign">
+                <small>AUTHORIZED SIGNATORY</small>
+                <strong>{{ bank.profile().name }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cheque-options margin-top-md">
+          <label class="app-form-label">Select Number of Cheque Leaves</label>
+          <div class="leaf-selector">
+            <button type="button" class="leaf-btn" [class.selected]="chequeBookLeaves() === '25'" (click)="setChequeLeaves('25')">
+              <strong>25 Leaves</strong>
+              <span>Standard Personal Book</span>
+            </button>
+            <button type="button" class="leaf-btn" [class.selected]="chequeBookLeaves() === '50'" (click)="setChequeLeaves('50')">
+              <strong>50 Leaves</strong>
+              <span>Frequent Issuance</span>
+            </button>
+            <button type="button" class="leaf-btn" [class.selected]="chequeBookLeaves() === '100'" (click)="setChequeLeaves('100')">
+              <strong>100 Leaves</strong>
+              <span>Business & Heavy Volume</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="delivery-info-box margin-top-md">
+          <i class="bi bi-geo-alt-fill text-primary"></i>
+          <div>
+            <strong>Delivery Address Confirmation</strong>
+            <span>Will be dispatched to: <em>{{ bank.profile().address?.street }}, {{ bank.profile().address?.city }}, {{ bank.profile().address?.state }} - {{ bank.profile().address?.pincode }}</em></span>
+          </div>
+        </div>
+
+        @if (chequeBookStatus()) {
+          <div class="alert alert-success mt-3 d-flex align-items-center gap-2" role="alert" style="border-radius: 12px;">
+            <i class="bi bi-check-circle-fill fs-5"></i>
+            <div>{{ chequeBookStatus() }}</div>
+          </div>
+        }
+
+        <div class="panel-footer">
+          <p class="form-hint"><i class="bi bi-shield-check text-success"></i> First cheque book per financial year is completely free of charge.</p>
+          <button class="primary-btn" type="button" (click)="requestChequeBook()">
+            <i class="bi bi-journal-plus"></i> Request Cheque Book Now
+          </button>
+        </div>
+      </article>
+    }
+  </main>
+</section>

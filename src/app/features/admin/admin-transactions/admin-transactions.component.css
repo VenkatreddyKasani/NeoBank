@@ -1,0 +1,32 @@
+.filter-bar { display: grid; grid-template-columns: 1.8fr 1fr 1fr; gap: 20px; padding: 22px 26px; margin-bottom: 24px; align-items: end; }
+.filter-group label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.filter-select, .filter-input { width: 100%; height: 44px; border: 1px solid var(--line); border-radius: 10px; padding: 0 14px; font-size: 13.5px; background: var(--card-bg, #fff); color: var(--ink); outline: none; transition: 0.2s; }
+.filter-select:focus, .filter-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+.search-input-wrap { position: relative; }
+.search-input-wrap i { position: absolute; left: 14px; top: 14px; color: var(--ink-muted); font-size: 14px; }
+.search-input-wrap input { padding-left: 38px; }
+
+.table-panel { padding: 26px; }
+.table-responsive { overflow-x: auto; margin-top: 16px; }
+.admin-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.admin-table th { background: var(--bg-alt, #f8fafc); color: var(--ink-muted); font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.8px; padding: 14px 16px; border-bottom: 2px solid var(--line); text-align: left; white-space: nowrap; }
+.admin-table td { padding: 16px; border-bottom: 1px solid var(--line); vertical-align: middle; color: var(--ink); }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: rgba(37, 99, 235, 0.03); }
+
+.txn-code { background: var(--bg-alt, #f1f5f9); border: 1px solid var(--line); padding: 3px 6px; border-radius: 6px; font-size: 11px; color: var(--ink-secondary); font-family: monospace; }
+.merchant-cell { display: flex; align-items: center; gap: 12px; }
+.merchant-icon { width: 38px; height: 38px; border-radius: 10px; background: #fef2f2; color: #dc2626; display: grid; place-items: center; font-size: 18px; flex: 0 0 auto; }
+.merchant-icon.credit { background: #f0fdf4; color: #16a34a; }
+
+.category-pill { background: var(--bg-alt, #f1f5f9); border: 1px solid var(--line); padding: 3px 10px; border-radius: 12px; font-size: 11.5px; font-weight: 600; color: var(--ink-secondary); }
+.type-badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.type-badge.credit { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+.credit-text strong { color: #16a34a !important; }
+
+.empty-cell { padding: 60px 20px !important; color: var(--ink-muted); }
+.empty-icon { font-size: 42px; display: block; margin-bottom: 12px; color: #cbd5e1; }
+
+@media (max-width: 800px) {
+  .filter-bar { grid-template-columns: 1fr; }
+}

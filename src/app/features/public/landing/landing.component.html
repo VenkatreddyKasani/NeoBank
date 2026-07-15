@@ -1,0 +1,171 @@
+<div class="landing-shell">
+  <header class="landing-header">
+    <div class="header-container">
+      <a routerLink="/welcome" class="brand-logo">
+        <span class="brand-mark"><i class="bi bi-lightning-charge-fill"></i></span>
+        <span class="brand-text">neo<span>bank</span></span>
+      </a>
+      <nav class="landing-nav d-none d-md-flex">
+        <a routerLink="/welcome" class="nav-item active">Welcome</a>
+        <a routerLink="/about" class="nav-item">About Us</a>
+        <a routerLink="/services" class="nav-item">Services</a>
+        <a routerLink="/open-account" class="nav-item">Open Account</a>
+      </nav>
+      <div class="header-actions">
+        <a routerLink="/login" class="secondary-btn">Sign In</a>
+        <a routerLink="/open-account" class="primary-btn pulse-btn">Open Bank Account <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-content">
+          <span class="hero-badge"><i class="bi bi-shield-check"></i> Next-Gen Virtual Banking Portal · RBI Licensed Partner</span>
+          <h1 class="hero-title">Virtual Banking Portal<br/><span class="highlight">Welcome to Virtual Banking</span></h1>
+          <p class="hero-subtitle">Open your digital bank account with zero paperwork. Experience instant virtual debit cards, enterprise-grade role security, real-time analytics, and 24/7 access.</p>
+          <div class="hero-cta">
+            <a routerLink="/open-account" class="hero-primary-btn"><i class="bi bi-lightning-charge-fill"></i> Open Bank Account</a>
+            <a routerLink="/login" class="hero-secondary-btn"><i class="bi bi-box-arrow-in-right"></i> Sign In to Portal</a>
+          </div>
+          <div class="trust-stats">
+            <div class="stat-box">
+              <strong>₹12.8L+</strong>
+              <span>Secured Today</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-box">
+              <strong>100%</strong>
+              <span>Role-Based Access</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-box">
+              <strong>24 / 7</strong>
+              <span>Online Portal</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-image-wrap">
+            <img src="hero-executive.jpg" alt="NeoBank Executive with Virtual VISA Card" class="hero-executive-img" loading="eager"/>
+            <div class="hero-image-glow"></div>
+          </div>
+          <div class="mockup-card glass-card float-anim mockup-card-overlay">
+            <div class="mockup-top">
+              <span class="mockup-logo"><i class="bi bi-lightning-charge-fill"></i> neobank</span>
+              <span class="mockup-chip"><i class="bi bi-sim"></i></span>
+            </div>
+            <div class="mockup-number">•••• •••• •••• 4621</div>
+            <div class="mockup-bottom">
+              <div>
+                <small>PORTAL ACCOUNT</small>
+                <strong>VENKAT RAMAN</strong>
+              </div>
+              <div>
+                <small>STATUS</small>
+                <strong class="text-green">VERIFIED KYC</strong>
+              </div>
+              <span class="visa-badge">VISA</span>
+            </div>
+          </div>
+          <div class="floating-badge badge-1 mb-5">
+            <span class="badge-icon green"><i class="bi bi-check-lg"></i></span>
+            <div>
+              <strong>As A CEO I Trust NeoBank</strong>
+              <small>...NITHISH KUMAR MALLEPALLY</small>
+            </div>
+          </div>
+          <div class="floating-badge badge-2">
+            <span class="badge-icon blue"><i class="bi bi-shield-lock"></i></span>
+            <div>
+              <strong>RBAC Enterprise Security</strong>
+              <small>Admin & User Portal Isolation</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features-section">
+      <div class="section-container">
+        <div class="section-heading text-center">
+          <span class="eyebrow">Virtual Banking Services</span>
+          <h2>Comprehensive Online Financial Capabilities</h2>
+          <p>Everything you need to manage personal wealth or govern system operations securely.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-icon blue"><i class="bi bi-credit-card-2-front"></i></span>
+            <h3>Virtual Debit Card & Vaults</h3>
+            <p>Generate VISA debit cards upon user registration. Set custom spending limits, freeze anytime, or open savings vaults.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon green"><i class="bi bi-lightning-charge"></i></span>
+            <h3>Instant Transfers & IMPS</h3>
+            <p>Send and receive payments 24/7 with zero charges. Transfer to payees or accounts across India instantly.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon violet"><i class="bi bi-file-earmark-spreadsheet"></i></span>
+            <h3>Statements & Analytics</h3>
+            <p>Download official account statements in PDF/Excel formats and track monthly cashflows with interactive charts.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon orange"><i class="bi bi-shield-check"></i></span>
+            <h3>Role-Based Authorization</h3>
+            <p>Strict access control separating Customer vaults from System Administrator governance (`/admin/customers` & `/admin/accounts`).</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="security" class="cta-section">
+      <div class="cta-banner">
+        <div class="cta-content">
+          <span class="eyebrow text-white">Join the Virtual Banking Portal</span>
+          <h2>New to Virtual Banking? Register Today</h2>
+          <p>Complete your user registration with your Aadhaar and PAN credentials to open your account instantly.</p>
+          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a routerLink="/open-account" class="cta-button" style="background: #ffffff; color: #1e3a8a; font-weight: 800;"><i class="bi bi-lightning-charge-fill"></i> Open Bank Account Online</a>
+            <a routerLink="/register" class="cta-button" style="background: rgba(255,255,255,0.22); color: #fff; border: 1px solid rgba(255,255,255,0.4);"><i class="bi bi-person-plus-fill"></i> Register Credentials</a>
+            <a routerLink="/login" class="cta-button" style="background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2);"><i class="bi bi-box-arrow-in-right"></i> Sign In to Portal</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <a routerLink="/welcome" class="brand-logo">
+          <span class="brand-mark"><i class="bi bi-lightning-charge-fill"></i></span>
+          <span class="brand-text">neo<span>bank</span></span>
+        </a>
+        <p>Virtual Banking Portal — Enterprise Spring Boot/FastAPI + Angular 20 full stack simulated architecture.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h4>Navigation</h4>
+          <a routerLink="/welcome">Home</a>
+          <a routerLink="/about">About Us</a>
+          <a routerLink="/services">Services</a>
+          <a routerLink="/open-account">Open Account</a>
+          <a routerLink="/login">Login</a>
+          <a routerLink="/register">Register</a>
+        </div>
+        <div>
+          <h4>Security & Compliance</h4>
+          <a href="#security">Privacy Policy</a>
+          <a href="#security">Terms of Service</a>
+          <a href="#security">Role-Based Access Control</a>
+          <a href="https://www.rbi.org.in/" target="_blank" rel="noopener">RBI Guidelines</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Virtual Banking Portal (NeoBank). All rights reserved.</span>
+      <span>Enterprise Authentication & Authorization Suite</span>
+    </div>
+  </footer>
+</div>

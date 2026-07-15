@@ -1,0 +1,233 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Pay your way</p>
+    <h1>Payments & Utility Hub</h1>
+    <p class="page-subtitle">Instant UPI transfers, QR code store scanning, utility bill payments, and instant phone recharges.</p>
+  </div>
+  <button class="primary-btn scan-btn-top" type="button" (click)="openScanner()">
+    <i class="bi bi-qr-code-scan"></i> Scan Merchant QR
+  </button>
+</section>
+
+<!-- Payments Category Navigation Tabs -->
+<div class="payments-nav-bar bank-card">
+  <button type="button" [class.active]="activeTab() === 'upi'" (click)="setTab('upi')">
+    <i class="bi bi-send"></i> UPI & QR Payments
+  </button>
+  <button type="button" [class.active]="activeTab() === 'bills'" (click)="setTab('bills')">
+    <i class="bi bi-receipt"></i> Utility Bill Payments
+  </button>
+  <button type="button" [class.active]="activeTab() === 'recharge'" (click)="setTab('recharge')">
+    <i class="bi bi-phone"></i> Mobile & DTH Recharge
+  </button>
+</div>
+
+<!-- TAB 1: UPI & QR PAYMENTS -->
+@if (activeTab() === 'upi') {
+  <section class="payment-grid fade-in">
+    <article class="bank-card upi-card">
+      <div class="card-heading">
+        <div>
+          <h2>Send by UPI ID / Handle</h2>
+          <p>Instant transfer to any bank account via verified UPI ID.</p>
+        </div>
+        <span class="upi-badge"><i class="bi bi-shield-check"></i> UPI Verified</span>
+      </div>
+
+      <form [formGroup]="upiForm" (ngSubmit)="payUpi()">
+        <label class="app-form-label" for="upi-id">Recipient UPI ID</label>
+        <input class="app-input" id="upi-id" formControlName="upiId" placeholder="name@bank or phone@upi" />
+        @if (upiForm.controls.upiId.touched && upiForm.controls.upiId.invalid) {
+          <p class="form-error"><i class="bi bi-exclamation-circle"></i> Enter a valid UPI ID containing '@'.</p>
+        }
+
+        <label class="app-form-label field-gap" for="upi-amount">Transfer Amount</label>
+        <div class="amount-field">
+          <span>₹</span>
+          <input id="upi-amount" type="number" formControlName="amount" placeholder="0" />
+        </div>
+        @if (upiForm.controls.amount.touched && upiForm.controls.amount.invalid) {
+          <p class="form-error"><i class="bi bi-exclamation-circle"></i> Enter an amount greater than zero.</p>
+        }
+
+        <p class="form-hint"><i class="bi bi-check2-circle"></i> Instant settlement with zero charges.</p>
+        <button class="primary-btn full-btn" type="submit">
+          <i class="bi bi-shield-lock-fill"></i> Pay Securely via UPI
+        </button>
+      </form>
+    </article>
+
+    <article class="qr-card">
+      <div class="qr-visual"><i class="bi bi-qr-code-scan"></i></div>
+      <h2>Scan & Pay at Store</h2>
+      <p>Use your camera to scan merchant QR codes at restaurants, shops & cabs across India.</p>
+      <button class="secondary-btn qr-action-btn" type="button" (click)="openScanner()">
+        <i class="bi bi-camera-fill"></i> Open Camera Scanner
+      </button>
+    </article>
+  </section>
+
+  <section class="bank-card favorites fade-in">
+    <div class="card-heading">
+      <div>
+        <h2>Frequent Contacts & Payees</h2>
+        <p>One-tap quick selection for people and merchants you pay regularly.</p>
+      </div>
+      <button class="secondary-btn" type="button" (click)="bank.addMoney(0, 'Contact sync ready')">
+        <i class="bi bi-plus-lg"></i> Add New Contact
+      </button>
+    </div>
+
+    <div class="favorite-list">
+      @for (person of [{name: 'Riya Sharma', initials: 'RS', handle: 'riya@okhdfcbank', color: 'blue'},
+                       {name: 'Kunal Shah', initials: 'KS', handle: 'kunal@okaxis', color: 'violet'},
+                       {name: 'Home Rent', initials: 'HR', handle: 'landlord@icici', color: 'green'},
+                       {name: 'Swiggy Gourmet', initials: 'SG', handle: 'swiggy@axisbank', color: 'orange'}]; track person.handle) {
+        <button type="button" (click)="upiForm.patchValue({upiId: person.handle})">
+          <span [class]="person.color">{{ person.initials }}</span>
+          <div class="fav-copy">
+            <strong>{{ person.name }}</strong>
+            <small>{{ person.handle }}</small>
+          </div>
+          <i class="bi bi-arrow-up-right fav-arrow"></i>
+        </button>
+      }
+    </div>
+  </section>
+}
+
+<!-- TAB 2: UTILITY BILL PAYMENTS -->
+@if (activeTab() === 'bills') {
+  <section class="bills-tab-section fade-in">
+    <div class="section-mini-head">
+      <h2>Pending & Recurring Utility Bills</h2>
+      <span>Automated reminder schedule active</span>
+    </div>
+
+    <div class="bill-options-grid">
+      @for (bill of quickPayments; track bill.name) {
+        <article class="bill-card bank-card">
+          <div class="bill-card-top">
+            <span class="bill-icon-badge" [class]="bill.color"><i class="bi" [ngClass]="bill.icon"></i></span>
+            <span class="bill-due-tag">{{ bill.due }}</span>
+          </div>
+          <h3>{{ bill.name }}</h3>
+          <p class="bill-amount">{{ bill.defaultAmount | inr }}</p>
+          <small class="bill-provider">Automatic meter reading verified</small>
+          <button type="button" class="primary-btn bill-pay-btn" (click)="payBill(bill.name, bill.defaultAmount)">
+            Pay Bill Now <i class="bi bi-arrow-right"></i>
+          </button>
+        </article>
+      }
+    </div>
+
+    <div class="bank-card auto-pay-banner margin-top-lg">
+      <div class="auto-pay-left">
+        <span class="auto-pay-icon"><i class="bi bi-calendar-check-fill"></i></span>
+        <div>
+          <h3>Never Miss a Due Date with AutoPay</h3>
+          <p>Set up automatic monthly debits from your Neo Primary savings account with ₹5,000 max limit protection.</p>
+        </div>
+      </div>
+      <button type="button" class="secondary-btn" (click)="bank.addMoney(0, 'AutoPay schedule configured')">
+        Configure AutoPay
+      </button>
+    </div>
+  </section>
+}
+
+<!-- TAB 3: MOBILE & DTH RECHARGE -->
+@if (activeTab() === 'recharge') {
+  <section class="recharge-tab-section fade-in">
+    <div class="section-mini-head">
+      <h2>Popular Instant Recharge Plans</h2>
+      <span>Select plan to recharge immediately</span>
+    </div>
+
+    <div class="recharge-plans-grid">
+      @for (plan of rechargePlans; track plan.operator) {
+        <article class="recharge-card bank-card">
+          <div class="plan-top">
+            <span class="operator-title">{{ plan.operator }}</span>
+            <span class="plan-badge">{{ plan.tag }}</span>
+          </div>
+          <div class="plan-price">{{ plan.price | inr }}</div>
+          <div class="plan-meta">
+            <span><i class="bi bi-calendar3"></i> Validity: <strong>{{ plan.validity }}</strong></span>
+            <span><i class="bi bi-wifi"></i> Data: <strong>{{ plan.data }}</strong></span>
+          </div>
+          <button type="button" class="primary-btn recharge-btn" (click)="payRecharge(plan)">
+            Recharge Now <i class="bi bi-lightning-charge"></i>
+          </button>
+        </article>
+      }
+    </div>
+  </section>
+}
+
+<!-- QR CODE CAMERA SCANNER SIMULATION MODAL -->
+@if (showQrScanner()) {
+  <div class="modal-overlay" (click)="closeScanner()">
+    <div class="modal-dialog-custom scanner-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header-custom">
+        <h3><i class="bi bi-qr-code-scan text-blue"></i> Scan Any Merchant QR Code</h3>
+        <button type="button" class="modal-close-btn" (click)="closeScanner()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="modal-body-custom scanner-body text-center">
+        @if (!scannedMerchant()) {
+          <div class="camera-viewport">
+            <div class="scan-frame">
+              <div class="corner top-left"></div>
+              <div class="corner top-right"></div>
+              <div class="corner bottom-left"></div>
+              <div class="corner bottom-right"></div>
+              <div class="laser-beam"></div>
+            </div>
+            <p class="camera-status">Camera active · Point at store QR code</p>
+          </div>
+
+          <div class="demo-merchants">
+            <span class="demo-label">OR SIMULATE INSTANT SCAN WITH TOP MERCHANTS:</span>
+            <div class="merchant-buttons">
+              <button type="button" class="merchant-btn" (click)="simulateScan({name: 'Starbucks Coffee Reserve', upi: 'starbucks@okhdfcbank', amount: 485, icon: 'bi-cup-hot'})">
+                <i class="bi bi-cup-hot text-amber"></i> Starbucks (₹485)
+              </button>
+              <button type="button" class="merchant-btn" (click)="simulateScan({name: 'Swiggy Food Gourmet', upi: 'swiggy@axisbank', amount: 620, icon: 'bi-bag-check'})">
+                <i class="bi bi-bag-check text-orange"></i> Swiggy (₹620)
+              </button>
+              <button type="button" class="merchant-btn" (click)="simulateScan({name: 'Uber India Cab Ride', upi: 'uber@icici', amount: 310, icon: 'bi-car-front'})">
+                <i class="bi bi-car-front text-blue"></i> Uber Ride (₹310)
+              </button>
+              <button type="button" class="merchant-btn" (click)="simulateScan({name: 'Amazon India Retail', upi: 'amazon@sbi', amount: 1499, icon: 'bi-box-seam'})">
+                <i class="bi bi-box-seam text-green"></i> Amazon (₹1,499)
+              </button>
+            </div>
+          </div>
+        } @else if (scannedMerchant(); as m) {
+          <div class="scanned-confirm-box fade-in">
+            <div class="merchant-avatar"><i class="bi" [ngClass]="m.icon"></i></div>
+            <span class="scanned-tag"><i class="bi bi-check-circle-fill"></i> QR Code Recognized</span>
+            <h3>{{ m.name }}</h3>
+            <p class="m-upi">{{ m.upi }}</p>
+            <div class="scan-amount">{{ m.amount | inr }}</div>
+            <p class="security-info"><i class="bi bi-lock-fill"></i> Payment directly from Neo Primary Savings Account</p>
+          </div>
+        }
+      </div>
+
+      <div class="modal-footer-custom dual-footer">
+        @if (!scannedMerchant()) {
+          <button type="button" class="secondary-btn full-btn" (click)="closeScanner()">Cancel Scan</button>
+        } @else {
+          <button type="button" class="secondary-btn" (click)="scannedMerchant.set(null)">Scan Another</button>
+          <button type="button" class="primary-btn confirm-pay-btn" (click)="confirmQrPayment()">
+            <i class="bi bi-shield-check"></i> Confirm Payment of {{ scannedMerchant()?.amount | inr }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

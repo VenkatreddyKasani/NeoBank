@@ -1,0 +1,216 @@
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Money movement</p>
+    <h1>Transactions & Transfers</h1>
+    <p class="page-subtitle">Send, deposit, withdraw and audit every financial transaction across your NeoBank accounts.</p>
+  </div>
+</section>
+
+<section class="transactions-layout">
+  <!-- Left Column: Money Movement Forms -->
+  <article class="bank-card transfer-card">
+    <div class="transfer-tabs">
+      <button type="button" [class.active]="mode() === 'send'" (click)="setMode('send')">
+        <i class="bi bi-send"></i> Send
+      </button>
+      <button type="button" [class.active]="mode() === 'add'" (click)="setMode('add')">
+        <i class="bi bi-plus-circle"></i> Deposit
+      </button>
+      <button type="button" [class.active]="mode() === 'withdraw'" (click)="setMode('withdraw')">
+        <i class="bi bi-arrow-up-right-circle"></i> Withdraw
+      </button>
+    </div>
+
+    <!-- TAB 1: SEND MONEY -->
+    @if (mode() === 'send') {
+      <div class="form-intro">
+        <span class="form-icon blue"><i class="bi bi-send"></i></span>
+        <div>
+          <h2>Send Money Securely</h2>
+          <p>Instant transfers to bank accounts and UPI IDs across India.</p>
+        </div>
+      </div>
+      <form [formGroup]="transferForm" (ngSubmit)="sendMoney()">
+        <label class="app-form-label" for="recipient">Recipient Handle / Account</label>
+        <input class="app-input" id="recipient" formControlName="recipient" placeholder="Name, UPI ID or account number" />
+        @if (transferForm.controls.recipient.touched && transferForm.controls.recipient.invalid) {
+          <p class="form-error"><i class="bi bi-exclamation-circle"></i> Enter a valid recipient name or UPI ID.</p>
+        }
+
+        <label class="app-form-label field-gap" for="send-amount">Amount</label>
+        <div class="amount-field">
+          <span>₹</span>
+          <input id="send-amount" type="number" formControlName="amount" placeholder="0" />
+        </div>
+        @if (transferForm.controls.amount.touched && transferForm.controls.amount.invalid) {
+          <p class="form-error"><i class="bi bi-exclamation-circle"></i> Enter an amount greater than zero.</p>
+        }
+
+        <label class="app-form-label field-gap" for="note">Transfer Note <em>(optional)</em></label>
+        <input class="app-input" id="note" formControlName="note" placeholder="What is this payment for?" />
+
+        <p class="form-hint"><i class="bi bi-shield-check"></i> Zero fees. Instant IMPS / UPI delivery.</p>
+        <button class="primary-btn full-btn" type="submit">Send Money Now <i class="bi bi-arrow-right"></i></button>
+      </form>
+    }
+
+    <!-- TAB 2: ADD MONEY (DEPOSIT) -->
+    @else if (mode() === 'add') {
+      <div class="form-intro">
+        <span class="form-icon green"><i class="bi bi-arrow-down-left"></i></span>
+        <div>
+          <h2>Top Up Account</h2>
+          <p>Deposit funds instantly from linked accounts or salary deposits.</p>
+        </div>
+      </div>
+      <form [formGroup]="addMoneyForm" (ngSubmit)="addMoney()">
+        <label class="app-form-label" for="source">Source Bank Account</label>
+        <select class="app-select" id="source" formControlName="source">
+          <option>Salary Account Deposit</option>
+          <option>HDFC Bank •••• 8642</option>
+          <option>ICICI Bank •••• 2109</option>
+          <option>UPI Instant Top Up</option>
+        </select>
+
+        <label class="app-form-label field-gap" for="add-amount">Deposit Amount</label>
+        <div class="amount-field">
+          <span>₹</span>
+          <input id="add-amount" type="number" formControlName="amount" placeholder="0" />
+        </div>
+        @if (addMoneyForm.controls.amount.touched && addMoneyForm.controls.amount.invalid) {
+          <p class="form-error"><i class="bi bi-exclamation-circle"></i> Minimum deposit amount is ₹100.</p>
+        }
+
+        <p class="form-hint"><i class="bi bi-shield-check"></i> Zero transaction fees. Funds available immediately.</p>
+        <button class="primary-btn full-btn" type="submit">Deposit Money <i class="bi bi-plus-lg"></i></button>
+      </form>
+    }
+
+    <!-- TAB 3: WITHDRAW MONEY -->
+    @else {
+      <div class="form-intro">
+        <span class="form-icon orange"><i class="bi bi-cash-stack"></i></span>
+        <div>
+          <h2>Withdraw Funds</h2>
+          <p>Transfer available balance back to linked external bank accounts.</p>
+        </div>
+      </div>
+      <form [formGroup]="withdrawForm" (ngSubmit)="withdrawMoney()">
+        <label class="app-form-label" for="dest">Destination Bank Account</label>
+        <select class="app-select" id="dest" formControlName="destination">
+          <option>HDFC Bank Linked Account (•••• 8642)</option>
+          <option>ICICI Bank Linked Account (•••• 2109)</option>
+          <option>ATM Card Cash Withdrawal Request</option>
+        </select>
+
+        <label class="app-form-label field-gap" for="withdraw-amt">Withdrawal Amount</label>
+        <div class="amount-field">
+          <span>₹</span>
+          <input id="withdraw-amt" type="number" formControlName="amount" placeholder="0" />
+        </div>
+        @if (withdrawForm.controls.amount.touched && withdrawForm.controls.amount.invalid) {
+          <p class="form-error"><i class="bi bi-exclamation-circle"></i> Enter valid withdrawal amount (min ₹100).</p>
+        }
+
+        <p class="form-hint"><i class="bi bi-shield-check"></i> Maximum available balance: {{ bank.balance() | inr }}</p>
+        <button class="primary-btn full-btn" type="submit">Confirm Withdrawal <i class="bi bi-arrow-up-right"></i></button>
+      </form>
+    }
+  </article>
+
+  <!-- Right Column: Transaction History & Receipts -->
+  <article class="bank-card history-card">
+    <div class="card-heading">
+      <div>
+        <h2>Transaction History</h2>
+        <p>{{ filteredTransactions().length }} transactions match your criteria</p>
+      </div>
+      <button class="sort-button" type="button" (click)="toggleSort()">
+        <i class="bi bi-sort-down"></i> {{ sortNewest() ? 'Newest first' : 'Oldest first' }}
+      </button>
+    </div>
+
+    <!-- Filter Toolbar -->
+    <div class="history-filters">
+      <div class="history-search">
+        <i class="bi bi-search"></i>
+        <input type="search" placeholder="Search by merchant or category" (input)="onSearch($any($event.target).value)" />
+      </div>
+      <select class="filter-select" (change)="setCategory($any($event.target).value)">
+        @for (option of categories; track option) {
+          <option [selected]="category() === option">{{ option }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Transaction Table List -->
+    <div class="history-list">
+      @for (item of filteredTransactions(); track item.id) {
+        <div class="history-row" (click)="openReceipt(item)">
+          <span class="transaction-icon" [class.credit]="item.type === 'credit'">
+            <i class="bi" [ngClass]="item.icon"></i>
+          </span>
+          <div class="history-main">
+            <strong>{{ item.merchant }}</strong>
+            <span>{{ item.category }} · {{ item.date | date:'d MMM yyyy, h:mm a' }}</span>
+          </div>
+          <div class="history-amount" [class.credit]="item.type === 'credit'">
+            <strong>{{ item.type === 'credit' ? '+' : '-' }}{{ item.amount | inr }}</strong>
+            <span class="status-pill">{{ item.status }}</span>
+          </div>
+          <button class="receipt-button" type="button" aria-label="View receipt" (click)="$event.stopPropagation(); openReceipt(item)">
+            <i class="bi bi-receipt"></i>
+          </button>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <i class="bi bi-search"></i>
+          <p>No transactions match your search filter.</p>
+        </div>
+      }
+    </div>
+  </article>
+</section>
+
+<!-- TRANSACTION RECEIPT INTERACTIVE MODAL -->
+@if (selectedReceipt(); as receipt) {
+  <div class="modal-overlay" (click)="closeReceipt()">
+    <div class="modal-dialog-custom receipt-dialog" (click)="$event.stopPropagation()">
+      <div class="receipt-top-banner">
+        <div class="receipt-logo"><i class="bi bi-lightning-charge-fill"></i> neobank</div>
+        <span class="receipt-tag">OFFICIAL RECEIPT</span>
+      </div>
+
+      <div class="receipt-header text-center">
+        <span class="receipt-icon" [class.credit]="receipt.type === 'credit'">
+          <i class="bi" [ngClass]="receipt.icon"></i>
+        </span>
+        <h2>{{ receipt.type === 'credit' ? '+' : '-' }}{{ receipt.amount | inr }}</h2>
+        <p>{{ receipt.merchant }}</p>
+        <span class="status-pill success"><i class="bi bi-check-circle-fill"></i> {{ receipt.status }}</span>
+      </div>
+
+      <div class="receipt-details-list">
+        <div class="r-row"><span>Transaction ID</span><strong>NEO-TXN-{{ receipt.id.slice(-6).toUpperCase() }}</strong></div>
+        <div class="r-row"><span>Timestamp</span><strong>{{ receipt.date | date:'medium' }}</strong></div>
+        <div class="r-row"><span>Payment Category</span><strong>{{ receipt.category }}</strong></div>
+        <div class="r-row"><span>Payment Type</span><strong>{{ receipt.type === 'credit' ? 'Account Deposit / Credit' : 'Payment / Debit' }}</strong></div>
+        <div class="r-row"><span>Processing Fee</span><strong>₹0.00 (Zero Fee)</strong></div>
+        <div class="r-row"><span>Source / Destination</span><strong>Neo Primary Account (•••• 4821)</strong></div>
+      </div>
+
+      <div class="receipt-security-note">
+        <i class="bi bi-shield-check text-green"></i>
+        <span>This is an electronic receipt generated by NeoBank Core System. Digitally verified & secured.</span>
+      </div>
+
+      <div class="modal-footer-custom dual-footer">
+        <button type="button" class="secondary-btn" (click)="closeReceipt()">Close</button>
+        <div class="right-actions">
+          <button type="button" class="secondary-btn" (click)="bank.addMoney(0, 'Receipt copied to clipboard')"><i class="bi bi-share"></i> Share</button>
+          <button type="button" class="primary-btn" (click)="downloadReceipt()"><i class="bi bi-download"></i> Download PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

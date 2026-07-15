@@ -1,0 +1,73 @@
+.page-head { margin-bottom: 28px; }
+.transactions-layout { display: grid; gap: 24px; grid-template-columns: minmax(340px, 0.8fr) minmax(0, 1.4fr); }
+.transfer-card { padding: 12px 24px 28px; }
+.transfer-tabs { border-bottom: 1px solid var(--line); display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 -24px 24px; }
+.transfer-tabs button { background: transparent; border: 0; border-bottom: 2px solid transparent; color: var(--ink-muted); font-size: 13px; font-weight: 600; padding: 16px 8px 14px; transition: 0.2s; cursor: pointer; }
+.transfer-tabs button:hover { color: var(--blue); }
+.transfer-tabs button.active { border-color: var(--blue); color: var(--blue); }
+.transfer-tabs i { margin-right: 6px; }
+
+.form-intro { align-items: center; display: flex; gap: 14px; margin-bottom: 24px; }
+.form-icon { align-items: center; border-radius: 12px; display: grid; font-size: 20px; height: 44px; place-items: center; width: 44px; flex: 0 0 auto; }
+.form-icon.blue { background: rgba(37, 99, 235, 0.15); color: #2563eb; }
+.form-icon.green { background: rgba(22, 163, 74, 0.15); color: #16a34a; }
+.form-icon.orange { background: rgba(234, 88, 12, 0.15); color: #ea580c; }
+.form-intro h2 { font-size: 16px; font-weight: 700; margin: 0 0 2px; color: var(--ink); }
+.form-intro p { color: var(--ink-muted); font-size: 12px; margin: 0; }
+
+.field-gap { display: block; margin-top: 16px; }
+.app-form-label em { color: var(--ink-muted); font-style: normal; font-weight: 400; }
+.full-btn { justify-content: center; margin-top: 24px; width: 100%; }
+.form-hint i { color: #16a34a; margin-right: 4px; }
+
+.history-card { padding: 24px 24px 16px; }
+.sort-button { background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; color: var(--ink-secondary); font-size: 11px; font-weight: 600; padding: 8px 12px; transition: 0.2s; cursor: pointer; }
+.sort-button:hover { border-color: #cbd5e1; color: var(--blue); }
+.history-filters { display: flex; gap: 12px; margin: 20px 0 12px; }
+.history-search { align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 10px; color: var(--ink-muted); display: flex; flex: 1; gap: 10px; height: 42px; padding: 0 14px; transition: 0.2s; }
+.history-search:focus-within { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+.history-search input { border: 0; background: transparent; font-size: 13px; outline: 0; width: 100%; color: var(--ink); }
+.filter-select { background: #fff; border: 1px solid var(--line); border-radius: 10px; color: var(--ink-secondary); font-size: 13px; padding: 0 12px; height: 42px; outline: 0; transition: 0.2s; cursor: pointer; }
+.filter-select:focus { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+
+.history-list { display: flex; flex-direction: column; gap: 4px; }
+.history-row { align-items: center; border-bottom: 1px solid var(--line); display: flex; gap: 14px; padding: 14px 8px; border-radius: 12px; transition: 0.2s; cursor: pointer; }
+.history-row:hover { background: #f8fafc; }
+.transaction-icon { width: 44px; height: 44px; border-radius: 12px; background: #fef2f2; color: #dc2626; display: grid; place-items: center; font-size: 18px; flex: 0 0 auto; }
+.transaction-icon.credit { background: #f0fdf4; color: #16a34a; }
+.history-main { flex: 1; min-width: 0; }
+.history-main strong, .history-amount strong { display: block; font-size: 14px; font-weight: 700; color: var(--ink); }
+.history-main span { color: var(--ink-muted); font-size: 11px; margin-top: 3px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.history-amount { text-align: right; flex: 0 0 auto; }
+.history-amount.credit strong { color: #16a34a; }
+.receipt-button { background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; color: var(--ink-muted); cursor: pointer; padding: 8px 10px; transition: 0.2s; }
+.receipt-button:hover { background: var(--blue-light); border-color: #93c5fd; color: var(--blue); }
+
+/* Receipt Modal Styles */
+.receipt-dialog { max-width: 480px; padding: 0; border-radius: 24px; overflow: hidden; }
+.receipt-top-banner { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: #fff; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; }
+.receipt-logo { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.receipt-tag { background: rgba(255, 255, 255, 0.2); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 12px; letter-spacing: 0.8px; }
+.receipt-header { padding: 28px 24px 20px; border-bottom: 1px solid var(--line); }
+.receipt-icon { width: 56px; height: 56px; border-radius: 16px; background: #fef2f2; color: #dc2626; display: grid; place-items: center; font-size: 24px; margin: 0 auto 14px; }
+.receipt-icon.credit { background: #f0fdf4; color: #16a34a; }
+.receipt-header h2 { font-size: 32px; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.6px; }
+.receipt-header p { color: var(--ink-muted); font-size: 15px; font-weight: 600; margin: 0 0 14px; }
+
+.receipt-details-list { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+.r-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.r-row span { color: var(--ink-muted); }
+.r-row strong { color: var(--ink); font-weight: 600; text-align: right; max-width: 65%; }
+
+.receipt-security-note { background: #f8fafc; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 14px 24px; display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
+.dual-footer { justify-content: space-between; align-items: center; }
+.right-actions { display: flex; gap: 10px; }
+
+.dark-theme .history-search, .dark-theme .filter-select, .dark-theme .sort-button, .dark-theme .receipt-button { background: #182235; border-color: #334155; color: #f8fafc; }
+.dark-theme .history-row:hover { background: #182235; }
+.dark-theme .receipt-security-note { background: #182235; }
+
+@media (max-width: 900px) {
+  .transactions-layout { grid-template-columns: 1fr; }
+  .history-filters { flex-wrap: wrap; }
+}

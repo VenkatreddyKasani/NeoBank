@@ -1,0 +1,196 @@
+<section class="page-head accounts-head">
+  <div>
+    <p class="eyebrow">Your money</p>
+    <h1>My Accounts & Balances</h1>
+    <p class="page-subtitle">Organise everyday spending, business cashflow, and high-yield savings across dedicated spaces.</p>
+  </div>
+  <button class="secondary-btn" type="button" (click)="toggleNumbers()">
+    <i class="bi" [ngClass]="showNumbers() ? 'bi-eye-slash' : 'bi-eye'"></i> {{ showNumbers() ? 'Hide details' : 'Show details' }}
+  </button>
+</section>
+
+<!-- My Accounts Grid -->
+<section class="accounts-grid">
+  @for (account of bank.accounts; track account.id) {
+    <article
+      class="account-card"
+      [class]="account.color"
+      [class.selected-card]="selectedAccountId() === account.id"
+      appCardElevation
+      (click)="selectAccount(account.id)">
+      <div class="account-top">
+        <span class="account-logo"><i class="bi bi-lightning-charge-fill"></i></span>
+        <div class="card-badge">
+          @if (selectedAccountId() === account.id) {
+            <span class="active-badge"><i class="bi bi-check-circle-fill"></i> Selected</span>
+          }
+        </div>
+      </div>
+      <div class="account-copy">
+        <span>{{ account.name }}</span>
+        <strong>{{ account.balance | inr:'1.2-2' }}</strong>
+        <small>{{ account.type }}</small>
+      </div>
+      <div class="account-bottom">
+        <span>{{ showNumbers() ? 'Acct: ' + (account.id === 'primary' ? '2847102384821' : '8842109938192') : account.number }}</span>
+        <i class="bi bi-arrow-up-right"></i>
+      </div>
+    </article>
+  }
+</section>
+
+<!-- Account Balance Summary Bar -->
+<section class="balance-overview-bar bank-card">
+  <div class="overview-item">
+    <span class="overview-label"><i class="bi bi-wallet2 text-blue"></i> Liquid Balance</span>
+    <strong>{{ bank.balance() | inr:'1.2-2' }}</strong>
+    <small>Immediate withdrawal ready</small>
+  </div>
+  <div class="overview-divider"></div>
+  <div class="overview-item">
+    <span class="overview-label"><i class="bi bi-lock-fill text-orange"></i> Hold / Locked Amount</span>
+    <strong>₹0.00</strong>
+    <small>No pending disputes</small>
+  </div>
+  <div class="overview-divider"></div>
+  <div class="overview-item">
+    <span class="overview-label"><i class="bi bi-graph-up-arrow text-green"></i> Accrued Interest (YTD)</span>
+    <strong class="text-green">+₹1,240.50</strong>
+    <small>Interest credited monthly</small>
+  </div>
+</section>
+
+<!-- Account Details & Mini Statement Layout -->
+<section class="account-details-layout">
+  <!-- Account Details Card -->
+  <article class="bank-card main-account">
+    <div class="card-heading">
+      <div>
+        <h2>{{ selectedAccount().name }} Specification</h2>
+        <p>{{ selectedAccount().type }} · Complete account credentials</p>
+      </div>
+      <span class="account-status"><i class="bi bi-check-circle-fill"></i> Active Status</span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-cell">
+        <span>Available Balance</span>
+        <strong class="highlight-balance">{{ selectedAccount().balance | inr:'1.2-2' }}</strong>
+      </div>
+      <div class="detail-cell">
+        <span>Account Number</span>
+        <strong>{{ showNumbers() ? (selectedAccount().id === 'primary' ? '2847102384821' : '8842109938192') : selectedAccount().number }}</strong>
+      </div>
+      <div class="detail-cell">
+        <span>IFSC Code</span>
+        <strong>NEOB0001024</strong>
+      </div>
+      <div class="detail-cell">
+        <span>UPI Handle</span>
+        <strong>{{ bank.profile().email.split('@')[0] }}@neobank</strong>
+      </div>
+      <div class="detail-cell">
+        <span>Customer ID</span>
+        <strong>{{ bank.profile().customerId || 'NEO-894210' }}</strong>
+      </div>
+      <div class="detail-cell">
+        <span>Annual Interest Rate</span>
+        <strong>7.2% p.a. (Monthly Payout)</strong>
+      </div>
+    </div>
+
+    <div class="account-actions">
+      <button class="primary-btn" type="button" (click)="openStatementModal()">
+        <i class="bi bi-file-earmark-arrow-down"></i> Download Statement
+      </button>
+      <button class="secondary-btn" type="button" (click)="bank.addMoney(0, 'Account details copied to clipboard')">
+        <i class="bi bi-clipboard"></i> Copy Details
+      </button>
+    </div>
+  </article>
+
+  <!-- Mini Statement Panel -->
+  <article class="bank-card mini-statement">
+    <div class="card-heading">
+      <div>
+        <h2>Mini Statement</h2>
+        <p>Recent 5 transactions for this account</p>
+      </div>
+      <span class="pill-badge">Recent</span>
+    </div>
+
+    <div class="mini-statement-list">
+      @for (txn of accountTransactions(); track txn.id) {
+        <div class="mini-row">
+          <div class="mini-icon" [class.credit]="txn.type === 'credit'">
+            <i class="bi" [ngClass]="txn.icon"></i>
+          </div>
+          <div class="mini-info">
+            <strong>{{ txn.merchant }}</strong>
+            <span>{{ txn.date | date:'d MMM yyyy' }} · {{ txn.category }}</span>
+          </div>
+          <div class="mini-amt" [class.credit]="txn.type === 'credit'">
+            <strong>{{ txn.type === 'credit' ? '+' : '-' }}{{ txn.amount | inr }}</strong>
+            <small>{{ txn.status }}</small>
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+</section>
+
+<!-- DOWNLOAD STATEMENT INTERACTIVE MODAL -->
+@if (showStatementModal()) {
+  <div class="modal-overlay" (click)="closeStatementModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-header-custom">
+        <h3>Download Account Statement</h3>
+        <button type="button" class="modal-close-btn" (click)="closeStatementModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="modal-body-custom">
+        <p class="modal-intro">Select the time period and document format for your official verified bank statement.</p>
+        
+        <div class="form-group margin-bottom-md">
+          <label class="app-form-label">Select Date Range</label>
+          <select class="app-select" [(ngModel)]="statementRange">
+            <option value="Last 30 Days">Last 30 Days</option>
+            <option value="Last 3 Months">Last 3 Months</option>
+            <option value="Last 6 Months">Last 6 Months</option>
+            <option value="Financial Year 2025-26">Financial Year 2025-26</option>
+            <option value="Custom Date Range">Custom Date Range</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="app-form-label">Select Document Format</label>
+          <div class="format-options">
+            <label class="format-card" [class.selected]="statementFormat === 'PDF Document'">
+              <input type="radio" [(ngModel)]="statementFormat" value="PDF Document" name="format" />
+              <i class="bi bi-file-earmark-pdf text-danger"></i>
+              <div>
+                <strong>PDF Document (.pdf)</strong>
+                <span>Official digitally signed statement for visa & loans</span>
+              </div>
+            </label>
+            <label class="format-card" [class.selected]="statementFormat === 'Excel Workbook'">
+              <input type="radio" [(ngModel)]="statementFormat" value="Excel Workbook" name="format" />
+              <i class="bi bi-file-earmark-excel text-success"></i>
+              <div>
+                <strong>Excel Workbook (.xlsx)</strong>
+                <span>Structured tabular data for accounting & budgeting</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer-custom">
+        <button type="button" class="secondary-btn" (click)="closeStatementModal()">Cancel</button>
+        <button type="button" class="primary-btn" (click)="triggerStatementDownload()">
+          <i class="bi bi-download"></i> Generate & Download
+        </button>
+      </div>
+    </div>
+  </div>
+}
