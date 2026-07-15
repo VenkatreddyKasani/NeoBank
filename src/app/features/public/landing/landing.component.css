@@ -57,7 +57,7 @@
 .visa-badge { font-size: 22px; font-weight: 900; font-style: italic; color: #fff; letter-spacing: -1px; }
 
 .floating-badge { align-items: center; background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 18px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5); display: flex; gap: 14px; padding: 14px 20px; position: absolute; z-index: 5; backdrop-filter: blur(16px); }
-.badge-1 { top: 25px; right: -75px; animation: float 6s ease-in-out infinite; }
+.badge-1 { top: 25px; right: -130px; animation: float 6s ease-in-out infinite; }
 .badge-2 { bottom: 80px; right: -30px; animation: float 6s ease-in-out infinite 3s; }
 .badge-icon { border-radius: 12px; display: grid; font-size: 18px; height: 42px; place-items: center; width: 42px; flex: 0 0 auto; }
 .badge-icon.green { background: rgba(22, 163, 74, 0.2); color: #4ade80; }
